@@ -156,7 +156,6 @@
     .message-ticks { font-size: 1rem; }
     .message-ticks.seen { color: #34b7f1; }
 
-    /* NEW: WhatsApp-style Date Separator */
     .date-separator { text-align: center; margin: 15px 0; }
     .date-separator span { background-color: #e1f2fb; color: #5e5e5e; padding: 5px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 500; box-shadow: 0 1px 1px rgba(0,0,0,0.05); }
 
@@ -179,8 +178,8 @@
     .profile-pic-uploader { position: relative; width: 120px; height: 120px; margin: 0 auto 1.5rem; }
     .profile-pic-preview { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid var(--border-color); background-color: var(--secondary-color); }
     .profile-pic-placeholder { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; border-radius: 50%; background-color: var(--primary-color); color: white; font-size: 3rem; font-weight: bold; border: 4px solid var(--border-color); }
-    #account .profile-pic-uploader .profile-pic-preview { border: none; } /* Border is handled by gradient parent */
-    #account .profile-pic-uploader { width: 128px; height: 128px; } /* Slightly larger to accommodate border */
+    #account .profile-pic-uploader .profile-pic-preview { border: none; } 
+    #account .profile-pic-uploader { width: 128px; height: 128px; }
     .verification-badge { position: absolute; bottom: 2px; right: 2px; width: 40px; height: 40px; z-index: 2; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: white; font-size: 1.2rem; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
     .verification-badge.verified-badge { background: linear-gradient(45deg, #22c55e, #4ade80); animation: badge-glow 2s infinite alternate; }
     .verification-badge.unverified-badge { background-color: var(--danger); }
@@ -192,16 +191,14 @@
     .profile-pic-uploader label { position: absolute; bottom: 0; right: 0; width: 36px; height: 36px; background: white; color: var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2); border: 2px solid white; z-index: 2;}
     .profile-pic-uploader input[type="file"] { display: none; }
     
-    /* Animated Gradient Border for Profile Picture */
     @keyframes animated-gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-    .animated-gradient-border { position: relative; padding: 4px; border-radius: 50%; overflow: visible; /* Allow tick to overflow */ }
+    .animated-gradient-border { position: relative; padding: 4px; border-radius: 50%; overflow: visible; }
     .animated-gradient-border::before { content: ''; position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 0; margin: -4px; border-radius: inherit; background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff); background-size: 400% 400%; animation: animated-gradient 3s linear infinite; }
-    .animated-gradient-border > img, .animated-gradient-border > div { position: relative; z-index: 1; } /* Ensure pic is above gradient */
+    .animated-gradient-border > img, .animated-gradient-border > div { position: relative; z-index: 1; }
     .conversation-item .animated-gradient-border { padding: 2px; margin-right: 15px; width: 54px; height: 54px; flex-shrink: 0; }
     .conversation-item .animated-gradient-border::before { margin: -2px; }
     .conversation-item .conversation-avatar { margin: 0; width: 100%; height: 100%; font-size: 1.5rem; }
     
-    /* Variant System Styles */
     #variant-modal .modal { max-width: 1200px; width: 95%; }
     .variant-layout { display: grid; grid-template-columns: 350px 1fr; gap: 24px; }
     .variant-steps { display: flex; flex-direction: column; gap: 20px; }
@@ -223,7 +220,6 @@
     #current-variants-list td { font-size: 0.95rem; }
     .variant-details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; align-items: flex-end; }
 
-    /* Review Styles */
     .reviews-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
     .review-card { background-color: var(--white); border-radius: 12px; padding: 20px; box-shadow: var(--shadow); cursor: pointer; transition: all 0.2s ease-out; }
     .review-card:hover { transform: translateY(-5px); box-shadow: 0 8px 16px rgba(15, 23, 42, 0.1); }
@@ -242,10 +238,8 @@
     .all-reviews-list .review-item:last-child { border-bottom: none; }
     .all-reviews-list .review-item .review-comment { border: none; padding-left: 0; margin-top: 8px; }
 
-    /* Dashboard Chart Styles */
     .dashboard-charts-container { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; }
 
-    /* Payment Page Styles */
     .earnings-summary-container { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
     .summary-card { padding: 24px; border-radius: 12px; color: var(--white); }
     .summary-card h3 { margin-top: 0; opacity: 0.8; }
@@ -257,12 +251,10 @@
     .status-badge.successful { background-color: var(--success); }
     .status-badge.canceled { background-color: var(--danger); }
     
-    /* START: New Styles for Added Features */
-    /* Task 1: Floating WhatsApp Button */
     .whatsapp-fab {
       position: fixed;
-      bottom: 25px;
-      right: 25px;
+      top: 85%;
+      left: 90%;
       width: 60px;
       height: 60px;
       background-color: #25D366;
@@ -277,72 +269,48 @@
       text-decoration: none;
       animation: whatsapp-pulse 2s infinite;
       transition: transform 0.3s ease;
+      cursor: grab;
+      user-select: none;
+    }
+    .whatsapp-fab:active {
+        cursor: grabbing;
     }
     .whatsapp-fab:hover {
       transform: scale(1.1);
       animation-play-state: paused;
     }
-    @keyframes whatsapp-pulse {
-      0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-      70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-    }
+    @keyframes whatsapp-pulse { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
 
-    /* Task 2: Social Media Icons */
-    .dashboard-social-icons {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-bottom: 24px;
-    }
-    .social-icon-link {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 60px;
-      height: 60px;
-      border-radius: 18px;
-      color: white;
-      font-size: 1.8rem;
-      text-decoration: none;
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    }
-    .social-icon-link:hover {
-      transform: translateY(-8px) scale(1.1);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
+    .dashboard-social-icons { display: flex; justify-content: center; gap: 20px; margin-bottom: 24px; }
+    .social-icon-link { display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; border-radius: 18px; color: white; font-size: 1.8rem; text-decoration: none; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+    .social-icon-link:hover { transform: translateY(-8px) scale(1.1); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
     .social-icon-facebook { background: linear-gradient(45deg, #1877f2, #3b5998); }
     .social-icon-youtube { background: linear-gradient(45deg, #ff0000, #c4302b); }
     .social-icon-instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
 
-    .sidebar-social-icons {
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-    }
-    .sidebar-social-link {
-      color: #aeb1b8;
-      font-size: 1.5rem;
-      transition: color 0.3s, transform 0.3s;
-      animation: sidebar-icon-shake 5s infinite;
-    }
-    .sidebar-social-link:hover {
-      transform: scale(1.2);
-      animation-play-state: paused;
-    }
+    .sidebar-social-icons { padding: 10px 20px; display: flex; justify-content: space-around; align-items: center; }
+    .sidebar-social-link { color: #aeb1b8; font-size: 1.5rem; transition: color 0.3s, transform 0.3s; animation: sidebar-icon-shake 5s infinite; }
+    .sidebar-social-link:hover { transform: scale(1.2); animation-play-state: paused; }
     .sidebar-social-link.facebook:hover { color: #1877f2; }
     .sidebar-social-link.youtube:hover { color: #ff0000; }
     .sidebar-social-link.instagram:hover { color: #e1306c; }
     .sidebar-social-link:nth-child(2) { animation-delay: 0.2s; }
     .sidebar-social-link:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes sidebar-icon-shake {
-        0%, 10%, 100% { transform: rotate(0); }
-        2%, 6% { transform: rotate(-15deg); }
-        4%, 8% { transform: rotate(15deg); }
-    }
-    /* END: New Styles for Added Features */
+    @keyframes sidebar-icon-shake { 0%, 10%, 100% { transform: rotate(0); } 2%, 6% { transform: rotate(-15deg); } 4%, 8% { transform: rotate(15deg); } }
+    
+    #attributes-section { grid-column: 1 / -1; border-top: 2px solid var(--border-color); padding-top: 20px; margin-top: 15px; display: flex; align-items: center; gap: 15px; }
+    #attributes-status { font-style: italic; color: var(--text-light); }
+    #attributes-modal .modal { max-width: 1100px; }
+    #attributes-modal-content h3 { margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px; }
+    .attributes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 24px; }
+    .attributes-grid .form-group { opacity: 0; animation: fadeIn 0.4s ease-out forwards; }
+    .measurement-group { display: flex; gap: 10px; align-items: center; }
+    .measurement-group input { flex-grow: 1; }
+    .measurement-group select { width: 100px; }
+    .custom-attribute-pair { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+    .custom-attribute-pair input { flex: 1; }
+    #payment .add-account-container { text-align: center; padding: 50px 20px; }
+    #payment .add-account-container i { font-size: 4rem; color: var(--primary-color); margin-bottom: 20px; }
 
     @media (max-width: 1024px) {
         .dashboard-charts-container { grid-template-columns: 1fr; }
@@ -360,7 +328,7 @@
       .main-header { font-size: 1.8rem; }
       .page-header { flex-direction: column; align-items: flex-start; gap: 12px; }
       .auth-form { padding: 20px; max-width: 100%; }
-      .form-grid { grid-template-columns: 1fr; }
+      .form-grid, .attributes-grid { grid-template-columns: 1fr; }
       .form-group.full-width { grid-column: auto; }
       .modal { padding: 16px; width: 95%; }
 
@@ -412,7 +380,7 @@
             <div class="form-group"><label for="signup-email">Email</label><input type="email" id="signup-email" required></div>
             <div class="form-group"><label for="signup-password">Password (min. 6 characters)</label><input type="password" id="signup-password" required></div>
             <div class="form-group"><label for="signup-contact">Phone Number (e.g., +923123456789)</label><input type="text" id="signup-contact" placeholder="+923123456789" pattern="^\+92[0-9]{10}$" required></div>
-            <div class="form-group"><label for="signup-age">Age</label><input type="number" id="signup-age" required></div>
+            <div class="form-group"><label for="signup-age">Age</label><select id="signup-age" required></select></div>
             <div class="form-group full-width"><label for="signup-city">City</label><select id="signup-city" required></select></div>
             <div class="form-group"><label for="signup-address">Address</label><input type="text" id="signup-address" required></div>
             <div class="form-group"><label for="signup-street-no">Street No.</label><input type="text" id="signup-street-no" required></div>
@@ -492,10 +460,11 @@
 
   <div id="product-modal" class="modal-overlay"></div>
   <div id="order-detail-modal" class="modal-overlay"></div>
-  <div id="payment-modal" class="modal-overlay"></div>
+  <div id="add-payment-modal" class="modal-overlay"></div>
   <div id="variant-modal" class="modal-overlay"></div>
   <div id="review-detail-modal" class="modal-overlay"></div>
   <div id="withdrawal-modal" class="modal-overlay"></div>
+  <div id="attributes-modal" class="modal-overlay"></div>
   
   <div id="loader-overlay" class="modal-overlay" style="flex-direction: column;">
     <div class="loader-spinner"></div>
@@ -516,7 +485,7 @@
     <i class="fab fa-whatsapp"></i>
   </a>
 
-
+ <script src="attributes.js"></script>
 <script defer>
 /* ===================================================================================
 //
@@ -567,39 +536,54 @@ async function fetchConfig() {
 // Data constants
 const signupCategories = ["Fashion Accessories", "Auto Accessories", "Electronics", "Home & Kitchen", "Beauty & Personal Care", "Sports & Outdoors", "Books", "Toys & Games", "Health & Household", "Industrial & Scientific"];
 const pakistanCities = ["Abbottabad","Bahawalpur","Faisalabad","Gujranwala","Gujrat","Hyderabad","Islamabad","Karachi","Lahore","Larkana","Mardan","Mirpur","Multan","Muzaffarabad","Peshawar","Quetta","Rahim Yar Khan","Rawalpindi","Sahiwal","Sargodha","Sheikhupura","Sialkot","Sukkur","Wah"].sort();
-const ageGroups = ["0.5 years", "1 year", "2 years", "3 years", "4 years", "5 to 7 years", "7 to 9 years", "10 to 12 years", "Teen age", "18 to 25", "26 to 35", "36 to 40", "41 to 50", "50 to 69", "60+"];
+const ageGroups = ["0-3 Months", "3-6 Months", "6-9 Months", "9-12 Months", "12-18 Months", "18-24 Months", "2-3 Years", "3-4 Years", "4-5 Years", "5-6 Years", "6-7 Years", "7-8 Years", "8-9 Years", "9-10 Years", "10-11 Years", "11-12 Years", "12-13 Years", "13-14 Years", "14-15 Years", "15-16 Years"];
 const colorFamilies = [
-    { name: 'Red', hex: '#FF0000' }, { name: 'Crimson', hex: '#DC143C' }, { name: 'Firebrick', hex: '#B22222' }, { name: 'Maroon', hex: '#800000' }, { name: 'Dark Red', hex: '#8B0000' },
-    { name: 'Pink', hex: '#FFC0CB' }, { name: 'Light Pink', hex: '#FFB6C1' }, { name: 'Hot Pink', hex: '#FF69B4' }, { name: 'Deep Pink', hex: '#FF1493' }, { name: 'Medium Violet Red', hex: '#C71585' },
-    { name: 'Orange', hex: '#FFA500' }, { name: 'Dark Orange', hex: '#FF8C00' }, { name: 'Coral', hex: '#FF7F50' }, { name: 'Tomato', hex: '#FF6347' }, { name: 'Orange Red', hex: '#FF4500' },
-    { name: 'Yellow', hex: '#FFFF00' }, { name: 'Light Yellow', hex: '#FFFFE0' }, { name: 'Lemon Chiffon', hex: '#FFFACD' }, { name: 'Gold', hex: '#FFD700' }, { name: 'Khaki', hex: '#F0E68C' },
-    { name: 'Purple', hex: '#800080' }, { name: 'Violet', hex: '#EE82EE' }, { name: 'Orchid', hex: '#DA70D6' }, { name: 'Magenta', hex: '#FF00FF' }, { name: 'Medium Orchid', hex: '#BA55D3' },
-    { name: 'Indigo', hex: '#4B0082' }, { name: 'Slate Blue', hex: '#6A5ACD' }, { name: 'Dark Slate Blue', hex: '#483D8B' }, { name: 'Blue Violet', hex: '#8A2BE2' },
-    { name: 'Green', hex: '#008000' }, { name: 'Lime', hex: '#00FF00' }, { name: 'Lime Green', hex: '#32CD32' }, { name: 'Pale Green', hex: '#98FB98' }, { name: 'Spring Green', hex: '#00FF7F' },
-    { name: 'Sea Green', hex: '#2E8B57' }, { name: 'Forest Green', hex: '#228B22' }, { name: 'Olive', hex: '#808000' }, { name: 'Dark Olive Green', hex: '#556B2F' },
+    { name: 'Red', hex: '#FF0000' }, { name: 'Crimson', hex: '#DC143C' }, { name: 'Firebrick', hex: '#B22222' }, { name: 'Maroon', hex: '#800000' }, { name: 'Dark Red', hex: '#8B0000' }, { name: 'Indian Red', hex: '#CD5C5C' }, { name: 'Tomato', hex: '#FF6347' },
+    { name: 'Pink', hex: '#FFC0CB' }, { name: 'Light Pink', hex: '#FFB6C1' }, { name: 'Hot Pink', hex: '#FF69B4' }, { name: 'Deep Pink', hex: '#FF1493' }, { name: 'Fuchsia', hex: '#FF00FF' }, { name: 'Magenta', hex: '#FF00FF' }, { name: 'Rose', hex: '#FF007F' },
+    { name: 'Orange', hex: '#FFA500' }, { name: 'Dark Orange', hex: '#FF8C00' }, { name: 'Coral', hex: '#FF7F50' }, { name: 'Orange Red', hex: '#FF4500' }, { name: 'Gold', hex: '#FFD700' }, { name: 'Goldenrod', hex: '#DAA520' },
+    { name: 'Yellow', hex: '#FFFF00' }, { name: 'Light Yellow', hex: '#FFFFE0' }, { name: 'Lemon', hex: '#FFFACD' }, { name: 'Khaki', hex: '#F0E68C' }, { name: 'Mustard', hex: '#FFDB58' },
+    { name: 'Green', hex: '#008000' }, { name: 'Lime', hex: '#00FF00' }, { name: 'Lime Green', hex: '#32CD32' }, { name: 'Lawn Green', hex: '#7CFC00' }, { name: 'Chartreuse', hex: '#7FFF00' },
+    { name: 'Pale Green', hex: '#98FB98' }, { name: 'Mint Green', hex: '#98FF98' }, { name: 'Spring Green', hex: '#00FF7F' }, { name: 'Sea Green', hex: '#2E8B57' }, { name: 'Forest Green', hex: '#228B22' },
+    { name: 'Olive', hex: '#808000' }, { name: 'Olive Drab', hex: '#6B8E23' }, { name: 'Dark Green', hex: '#006400' }, { name: 'Teal', hex: '#008080' },
     { name: 'Blue', hex: '#0000FF' }, { name: 'Medium Blue', hex: '#0000CD' }, { name: 'Dark Blue', hex: '#00008B' }, { name: 'Navy', hex: '#000080' }, { name: 'Royal Blue', hex: '#4169E1' },
-    { name: 'Cyan', hex: '#00FFFF' }, { name: 'Aqua', hex: '#00FFFF' }, { name: 'Light Cyan', hex: '#E0FFFF' }, { name: 'Pale Turquoise', hex: '#AFEEEE' }, { name: 'Aquamarine', hex: '#7FFFD4' },
-    { name: 'Turquoise', hex: '#40E0D0' }, { name: 'Teal', hex: '#008080' }, { name: 'Dark Cyan', hex: '#008B8B' }, { name: 'Light Sea Green', hex: '#20B2AA' },
+    { name: 'Dodger Blue', hex: '#1E90FF' }, { name: 'Deep Sky Blue', hex: '#00BFFF' }, { name: 'Sky Blue', hex: '#87CEEB' }, { name: 'Light Blue', hex: '#ADD8E6' }, { name: 'Powder Blue', hex: '#B0E0E6' },
+    { name: 'Steel Blue', hex: '#4682B4' }, { name: 'Cadet Blue', hex: '#5F9EA0' }, { name: 'Cornflower Blue', hex: '#6495ED' },
+    { name: 'Cyan', hex: '#00FFFF' }, { name: 'Aqua', hex: '#00FFFF' }, { name: 'Light Cyan', hex: '#E0FFFF' }, { name: 'Turquoise', hex: '#40E0D0' }, { name: 'Aquamarine', hex: '#7FFFD4' }, { name: 'Light Sea Green', hex: '#20B2AA' },
+    { name: 'Purple', hex: '#800080' }, { name: 'Violet', hex: '#EE82EE' }, { name: 'Orchid', hex: '#DA70D6' }, { name: 'Medium Orchid', hex: '#BA55D3' }, { name: 'Dark Orchid', hex: '#9932CC' },
+    { name: 'Indigo', hex: '#4B0082' }, { name: 'Blue Violet', hex: '#8A2BE2' }, { name: 'Dark Violet', hex: '#9400D3' }, { name: 'Lavender', hex: '#E6E6FA' }, { name: 'Plum', hex: '#DDA0DD' },
     { name: 'Brown', hex: '#A52A2A' }, { name: 'Saddle Brown', hex: '#8B4513' }, { name: 'Sienna', hex: '#A0522D' }, { name: 'Chocolate', hex: '#D2691E' }, { name: 'Peru', hex: '#CD853F' },
-    { name: 'White', hex: '#FFFFFF' }, { name: 'Snow', hex: '#FFFAFA' }, { name: 'Honeydew', hex: '#F0FFF0' }, { name: 'Mint Cream', hex: '#F5FFFA' }, { name: 'Azure', hex: '#F0FFFF' },
-    { name: 'Alice Blue', hex: '#F0F8FF' }, { name: 'Ghost White', hex: '#F8F8FF' }, { name: 'White Smoke', hex: '#F5F5F5' }, { name: 'Seashell', hex: '#FFF5EE' }, { name: 'Beige', hex: '#F5F5DC' },
-    { name: 'Old Lace', hex: '#FDF5E6' }, { name: 'Floral White', hex: '#FFFAF0' }, { name: 'Ivory', hex: '#FFFFF0' }, { name: 'Antique White', hex: '#FAEBD7' },
-    { name: 'Gray', hex: '#808080' }, { name: 'Grey', hex: '#808080' }, { name: 'Dark Gray', hex: '#A9A9A9' }, { name: 'Silver', hex: '#C0C0C0' }, { name: 'Light Gray', hex: '#D3D3D3' },
-    { name: 'Gainsboro', hex: '#DCDCDC' }, { name: 'Dim Gray', hex: '#696969' }, { name: 'Slate Gray', hex: '#708090' }, { name: 'Black', hex: '#000000' },
-    { name: 'Indian Red', hex: '#CD5C5C' }, { name: 'Light Coral', hex: '#F08080' }, { name: 'Salmon', hex: '#FA8072' }, { name: 'Dark Salmon', hex: '#E9967A' },
-    { name: 'Light Salmon', hex: '#FFA07A' }, { name: 'Tan', hex: '#D2B48C' }, { name: 'Rosy Brown', hex: '#BC8F8F' }, { name: 'Moccasin', hex: '#FFE4B5' },
-    { name: 'Navajo White', hex: '#FFDEAD' }, { name: 'Peach Puff', hex: '#FFDAB9' }, { name: 'Misty Rose', hex: '#FFE4E1' }, { name: 'Lavender Blush', hex: '#FFF0F5' },
-    { name: 'Linen', hex: '#FAF0E6' }, { name: 'Cornsilk', hex: '#FFF8DC' }, { name: 'Blanched Almond', hex: '#FFEBCD' }, { name: 'Bisque', hex: '#FFE4C4' },
-    { name: 'Wheat', hex: '#F5DEB3' }, { name: 'Burlywood', hex: '#DEB887' }, { name: 'Dark Goldenrod', hex: '#B8860B' }, { name: 'Goldenrod', hex: '#DAA520' },
-    { name: 'Yellow Green', hex: '#9ACD32' }, { name: 'Chartreuse', hex: '#7FFF00' }, { name: 'Lawn Green', hex: '#7CFC00' }, { name: 'Green Yellow', hex: '#ADFF2F' },
-    { name: 'Dark Sea Green', hex: '#8FBC8F' }, { name: 'Medium Sea Green', hex: '#3CB371' }, { name: 'Light Green', hex: '#90EE90' }, { name: 'Dark Green', hex: '#006400' },
-    { name: 'Cadet Blue', hex: '#5F9EA0' }, { name: 'Steel Blue', hex: '#4682B4' }, { name: 'Light Steel Blue', hex: '#B0C4DE' }, { name: 'Powder Blue', hex: '#B0E0E6' },
-    { name: 'Light Blue', hex: '#ADD8E6' }, { name: 'Sky Blue', hex: '#87CEEB' }, { name: 'Light Sky Blue', hex: '#87CEFA' }, { name: 'Deep Sky Blue', hex: '#00BFFF' },
-    { name: 'Dodger Blue', hex: '#1E90FF' }, { name: 'Cornflower Blue', hex: '#6495ED' }, { name: 'Medium Slate Blue', hex: '#7B68EE' }, { name: 'Medium Purple', hex: '#9370DB' },
-    { name: 'Dark Magenta', hex: '#8B008B' }, { name: 'Dark Violet', hex: '#9400D3' }, { name: 'Dark Orchid', hex: '#9932CC' }, { name: 'Thistle', hex: '#D8BFD8' },
-    { name: 'Plum', hex: '#DDA0DD' }, { name: 'Fuchsia', hex: '#FF00FF' }, { name: 'Lavender', hex: '#E6E6FA' }, { name: 'Papaya Whip', hex: '#FFEFD5' },
-    { name: 'Sandy Brown', hex: '#F4A460' }, { name: 'Olive Drab', hex: '#6B8E23' }
+    { name: 'Tan', hex: '#D2B48C' }, { name: 'Burlywood', hex: '#DEB887' }, { name: 'Beige', hex: '#F5F5DC' }, { name: 'Wheat', hex: '#F5DEB3' }, { name: 'Sandy Brown', hex: '#F4A460' }, { name: 'Terracotta', hex: '#E2725B' },
+    { name: 'White', hex: '#FFFFFF' }, { name: 'Snow', hex: '#FFFAFA' }, { name: 'Ivory', hex: '#FFFFF0' }, { name: 'Antique White', hex: '#FAEBD7' }, { name: 'Floral White', hex: '#FFFAF0' }, { name: 'Seashell', hex: '#FFF5EE' },
+    { name: 'Gray', hex: '#808080' }, { name: 'Dim Gray', hex: '#696969' }, { name: 'Light Gray', hex: '#D3D3D3' }, { name: 'Slate Gray', hex: '#708090' }, { name: 'Silver', hex: '#C0C0C0' }, { name: 'Charcoal', hex: '#36454F' },
+    { name: 'Black', hex: '#000000' },
+    { name: 'Gold Metal', hex: '#FFD700' }, { name: 'Silver Metal', hex: '#C0C0C0' }, { name: 'Bronze', hex: '#CD7F32' }, { name: 'Copper', hex: '#B87333' }
 ].sort((a, b) => a.name.localeCompare(b.name));
+
+
+
+// Programmatically add "Custom" and "Package Includes" to all categories
+(function enhanceAttributes() {
+    const packageIncludesAttr = { name: "Package Includes", type: "Text", options: "e.g., 1 x Shirt, 1 x Trousers" };
+    for (const key in categoryAttributes) {
+        if (Object.hasOwnProperty.call(categoryAttributes, key)) {
+            const attributes = categoryAttributes[key];
+            
+            if (!attributes.some(attr => attr.name === "Package Includes")) {
+                attributes.push(packageIncludesAttr); 
+            }
+
+            attributes.forEach(attr => {
+                if (attr.type === "Enum" && attr.options && !attr.options.toLowerCase().startsWith("custom")) {
+                    attr.options = "Custom, " + attr.options;
+                }
+            });
+        }
+    }
+})();
+
+/* ---------- END: DYNAMIC ATTRIBUTES DATA V5 ---------- */
+
+
 
 /* ---------- STATE & ELEMENTS ---------- */
 let state = { 
@@ -620,8 +604,8 @@ let realtimeChannel = null;
 let newVideoFile = null;
 let existingVideoUrl = null;
 let newProfilePicFile = null;
-let productVariants = []; // Holds variants during creation/editing
-let tempSelectedColor = null; // Holds color selection in variant modal
+let productVariants = [];
+let tempSelectedColor = null;
 let salesChartInstance = null;
 let orderStatusChartInstance = null;
 
@@ -651,7 +635,6 @@ function showConfirmation(message, callback, title = 'Are you sure?') {
     confirmMessageEl.textContent = message;
     onConfirmCallback = callback;
     
-    // Make it a message modal if no callback is provided
     if (callback) {
         confirmActionBtn.style.display = 'inline-flex';
         confirmCancelBtn.textContent = 'Cancel';
@@ -704,8 +687,10 @@ async function initializeApp() {
   }
   
   setupEventListeners();
+  setupDraggableWhatsAppButton();
   loadCities();
   loadSignupCategories();
+  loadAgeGroups();
 }
 
 async function fetchInitialData() {
@@ -855,10 +840,9 @@ async function handleSignup(e) {
         showLoader('Uploading profile picture...');
         const profilePicUrl = await uploadToCloudinary(profilePicFile, 'profile_pictures');
 
-        // This data is exclusively routed to the 'suppliers' table.
         const supplierData = {
-            id: newUserId, // Explicitly set the ID to match the auth user
-            email: email, // Set email
+            id: newUserId,
+            email: email,
             profile_pic: profilePicUrl,
             full_name: document.getElementById('signup-fullname').value,
             brand_name: document.getElementById('signup-brand-name').value,
@@ -873,7 +857,6 @@ async function handleSignup(e) {
             selected_categories: Array.from(document.querySelectorAll('#signup-category-checkboxes input:checked')).map(cb => cb.value)
         };
 
-        // Use 'insert' because this is a new record in the suppliers table.
         const { error: insertError } = await db.from('suppliers').insert(supplierData);
         if (insertError) throw insertError;
         
@@ -936,6 +919,18 @@ function loadCities() {
     option.textContent = city;
     citySelect.appendChild(option);
   });
+}
+
+function loadAgeGroups() {
+    const ageSelect = document.getElementById('signup-age');
+    if (!ageSelect) return;
+    ageSelect.innerHTML = '<option value="">Select Age Group...</option>';
+    ageGroups.forEach(age => {
+        const option = document.createElement('option');
+        option.value = age;
+        option.textContent = age;
+        ageSelect.appendChild(option);
+    });
 }
 
 function loadSignupCategories() {
@@ -1065,11 +1060,9 @@ function renderDashboardCharts(orders) {
     const statusCtx = document.getElementById('orderStatusChart')?.getContext('2d');
     if (!salesCtx || !statusCtx) return;
 
-    // Destroy existing charts if they exist
     if (salesChartInstance) salesChartInstance.destroy();
     if (orderStatusChartInstance) orderStatusChartInstance.destroy();
 
-    // --- Sales Chart ---
     const salesData = {};
     const today = new Date();
     const labels = [];
@@ -1116,7 +1109,6 @@ function renderDashboardCharts(orders) {
         }
     });
 
-    // --- Order Status Chart ---
     const statusCounts = orders.reduce((acc, order) => {
         const status = order.status.charAt(0).toUpperCase() + order.status.slice(1);
         acc[status] = (acc[status] || 0) + 1;
@@ -1202,6 +1194,8 @@ function showAddProductForm(product = null) {
       <h2>${isEdit ? 'Edit Product' : 'Add New Product'}</h2>
       <form id="product-form">
         <input type="hidden" id="product-id" value="${product?.id || ''}">
+        <input type="hidden" id="product-attributes-data" value='${isEdit && product.attributes ? JSON.stringify(product.attributes) : "{}"}'>
+
         <div class="form-grid">
           <div class="form-group full-width"><label for="product-title">Product Title</label><input type="text" id="product-title" value="${product?.title || ''}" required></div>
           <div class="form-group full-width"><label for="product-description">Description</label><textarea id="product-description" rows="5" placeholder="Provide a detailed and attractive description for your product...">${product?.description || ''}</textarea></div>
@@ -1213,6 +1207,24 @@ function showAddProductForm(product = null) {
           
           <div class="form-group full-width"><label for="product-parent-category">Main Category</label><select id="product-parent-category" required></select></div>
           <div class="form-group full-width" id="sub-category-container" style="display:none;"><label>Sub-Category (select one)</label><div id="product-sub-category-checkboxes" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; max-height: 150px; overflow-y: auto; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px;"></div></div>
+          
+          <div class="form-group full-width"><label for="product-season">Season</label>
+            <select id="product-season">
+              <option value="NULL">No Season</option>
+              <option value="Custom">Custom Season</option>
+              <option value="All Seasons">All Seasons</option>
+              <option value="Summer">Summer</option>
+              <option value="Winter">Winter</option>
+              <option value="Spring">Spring</option>
+              <option value="Autumn">Autumn</option>
+            </select>
+            <input type="text" id="product-season-custom" style="display:none; margin-top: 10px;" placeholder="Enter custom season">
+          </div>
+          
+          <div id="attributes-section">
+            <button type="button" class="btn btn-secondary" id="attributes-btn" onclick="openAttributesManager()" disabled><i class="fas fa-list-alt"></i> Add Product Attributes</button>
+            <span id="attributes-status">Select a sub-category first</span>
+          </div>
 
           <div class="form-group full-width"><label>Product Variants</label><p style="font-size: 0.9em; color: var(--text-light); margin-top: -5px;">Add different versions of your product, like colors and sizes.</p><button type="button" class="btn btn-primary" onclick="openVariantManager()"><i class="fas fa-sitemap"></i> Manage Variants</button><div id="variant-display-area" style="margin-top: 15px; font-style: italic; color: var(--text-light);">No variants added.</div></div>
 
@@ -1221,7 +1233,7 @@ function showAddProductForm(product = null) {
           <div class="form-group"><label>Package Dimensions</label><div style="display:flex; gap: 8px; align-items: center;"><input type="number" id="pkg-length" placeholder="L"><input type="number" id="pkg-width" placeholder="W"><input type="number" id="pkg-height" placeholder="H"><select id="pkg-unit"><option value="cm">cm</option><option value="in">in</option></select></div></div>
           <div class="form-group"><label>Package Weight</label><div style="display:flex; gap: 8px; align-items: center;"><input type="number" id="pkg-weight" placeholder="e.g., 500"><select id="pkg-weight-unit"><option value="g">g</option><option value="kg">kg</option><option value="mg">mg</option></select></div></div>
           
-          <div class="form-group full-width" style="border-top: 2px solid var(--border-color); padding-top: 15px;"><label>Product Images (Max 7)</label><label for="product-images" class="btn btn-secondary"><i class="fas fa-upload"></i> Upload Images</label><input type="file" id="product-images" style="display:none;" multiple accept="image/*" onchange="handleImageUpload(event)"><div id="image-previews"></div></div>
+          <div class="form-group full-width" style="border-top: 2px solid var(--border-color); padding-top: 15px;"><label>Product Images (Max 8)</label><label for="product-images" class="btn btn-secondary"><i class="fas fa-upload"></i> Upload Images</label><input type="file" id="product-images" style="display:none;" multiple accept="image/*" onchange="handleImageUpload(event)"><div id="image-previews"></div></div>
           
           <div class="form-group full-width"><label>Product Video</label><label for="product-video-file" class="btn btn-secondary" style="display: inline-block; cursor: pointer;"><i class="fas fa-video"></i> Choose Video</label><input type="file" id="product-video-file" accept="video/mp4,video/mov" style="display: none;" onchange="handleVideoUpload(event)"><div id="video-upload-progress" style="display: none; margin-top: 10px;"><p>Uploading...</p><progress id="video-progress-bar" value="0" max="100" style="width: 100%;"></progress></div><div id="video-preview-container" style="margin-top: 15px; position: relative; max-width: 300px;"></div></div>
         </div>
@@ -1243,12 +1255,24 @@ function showAddProductForm(product = null) {
   const parentCategorySelect = document.getElementById('product-parent-category');
   const subCategoryContainer = document.getElementById('sub-category-container');
   const subCategoryCheckboxes = document.getElementById('product-sub-category-checkboxes');
+  const attributesBtn = document.getElementById('attributes-btn');
+  const attributesStatus = document.getElementById('attributes-status');
+  const seasonSelect = document.getElementById('product-season');
+  const seasonCustomInput = document.getElementById('product-season-custom');
+
+  seasonSelect.addEventListener('change', () => {
+      seasonCustomInput.style.display = seasonSelect.value === 'Custom' ? 'block' : 'none';
+  });
   
   const parentCategories = state.categories.filter(c => c.parent_id === null);
   parentCategorySelect.innerHTML = '<option value="">Select a main category...</option>' + parentCategories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
 
   parentCategorySelect.onchange = () => {
       const selectedParentId = parentCategorySelect.value;
+      attributesBtn.disabled = true;
+      attributesStatus.textContent = 'Select a sub-category first';
+      document.getElementById('product-attributes-data').value = '{}';
+
       if (selectedParentId) {
           const subCategories = state.categories.filter(c => c.parent_id == selectedParentId);
           if (subCategories.length > 0) {
@@ -1267,6 +1291,14 @@ function showAddProductForm(product = null) {
           subCategoryCheckboxes.innerHTML = '';
       }
   };
+  
+  subCategoryCheckboxes.addEventListener('change', (e) => {
+      if (e.target.name === 'product-subcategory') {
+          attributesBtn.disabled = false;
+          attributesStatus.textContent = 'Click to add attributes';
+          document.getElementById('product-attributes-data').value = '{}';
+      }
+  });
 
   if (isEdit) {
     if (product.category_id) {
@@ -1276,10 +1308,27 @@ function showAddProductForm(product = null) {
             parentCategorySelect.dispatchEvent(new Event('change'));
             setTimeout(() => {
                 const radio = document.querySelector(`input[name="product-subcategory"][value="${product.category_id}"]`);
-                if (radio) radio.checked = true;
+                if (radio) {
+                    radio.checked = true;
+                    radio.dispatchEvent(new Event('change', { bubbles: true }));
+                    const savedAttrCount = Object.keys(product.attributes || {}).length;
+                    attributesStatus.textContent = `${savedAttrCount} attributes added`;
+                }
             }, 100);
         }
     }
+    if (product.season) {
+        if (['All Seasons', 'Summer', 'Winter', 'Spring', 'Autumn'].includes(product.season)) {
+            seasonSelect.value = product.season;
+        } else {
+            seasonSelect.value = 'Custom';
+            seasonCustomInput.value = product.season;
+            seasonCustomInput.style.display = 'block';
+        }
+    } else {
+        seasonSelect.value = 'NULL';
+    }
+
     if (product.image_urls && product.image_urls.length > 0) {
       document.getElementById('image-previews').innerHTML = product.image_urls.map(url => `
         <div class="preview-image-container" data-url="${url}">
@@ -1314,6 +1363,191 @@ function showAddProductForm(product = null) {
 }
 
 
+/* ---------- START: DYNAMIC ATTRIBUTE FUNCTIONS ---------- */
+function openAttributesManager() {
+    const subcategoryRadio = document.querySelector('input[name="product-subcategory"]:checked');
+    if (!subcategoryRadio) {
+        showConfirmation("Please select a sub-category before adding attributes.", null, "Selection Required");
+        return;
+    }
+    const subcategoryId = subcategoryRadio.value;
+    const subCategory = state.categories.find(c => c.id == subcategoryId);
+// CORRECT - This is the new, correct way
+const attributesKey = subcategoryId;
+    const attributes = categoryAttributes[attributesKey];
+    
+    if (!attributes || attributes.length === 0) {
+        showConfirmation("No specific attributes are defined for this sub-category. You can add your own custom attributes.", null, "Information", true);
+    }
+
+    let fieldsHtml = `<h3>Product Specifications for ${subCategory.name}</h3><div class="attributes-grid">`;
+    (attributes || []).forEach((attr, index) => {
+        const fieldId = `attr-modal-${attr.name.replace(/[^a-zA-Z0-9]/g, '-')}`;
+        let field = '';
+
+        const commonProps = `id="${fieldId}" data-attr-name="${attr.name}" onchange="handleAttributeChange(this)"`;
+
+        switch(attr.type.toLowerCase()) {
+            case 'enum':
+                const options = attr.options.split(',').map(o => o.trim());
+                field = `<select ${commonProps}>
+                            ${options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                         </select>
+                         <input type="text" data-custom-for="${fieldId}" style="display:none; margin-top: 10px;" placeholder="Enter custom value" maxlength="50">`;
+                break;
+            case 'number':
+                field = `<input type="number" ${commonProps} placeholder="${attr.options || ''}">`;
+                break;
+             case 'measurement':
+                field = `<div class="measurement-group">
+                            <input type="number" ${commonProps}>
+                            <select id="${fieldId}-unit" data-unit-for="${attr.name}">
+                                ${attr.units.map(u => `<option value="${u}">${u}</option>`).join('')}
+                            </select>
+                         </div>`;
+                break;
+            case 'textarea':
+                field = `<textarea rows="4" ${commonProps} placeholder="${attr.options || ''}"></textarea>`;
+                break;
+            case 'text':
+            default:
+                field = `<input type="text" ${commonProps} placeholder="${attr.options || ''}">`;
+                break;
+        }
+        fieldsHtml += `<div class="form-group" style="animation-delay: ${index * 50}ms">
+                        <label for="${fieldId}">${attr.name}</label>
+                        ${field}
+                       </div>`;
+    });
+    fieldsHtml += '</div>';
+    
+    fieldsHtml += `<div style="grid-column: 1 / -1; border-top: 1px solid var(--border-color); margin-top: 20px; padding-top: 20px;">
+        <h4>Custom Attributes</h4>
+        <div id="custom-attributes-container"></div>
+        <button type="button" class="btn btn-secondary" onclick="addCustomAttributePair()"><i class="fas fa-plus"></i> Add Custom Attribute</button>
+    </div>`;
+
+    const modal = document.getElementById('attributes-modal');
+    modal.innerHTML = `
+        <div class="modal">
+            <div id="attributes-modal-content">${fieldsHtml}</div>
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('attributes-modal')">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveAttributesFromModal()">Save Attributes</button>
+            </div>
+        </div>
+    `;
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('visible'), 10);
+    
+    const existingAttributesData = document.getElementById('product-attributes-data').value;
+    if (existingAttributesData) {
+        try {
+            const savedAttributes = JSON.parse(existingAttributesData);
+            for (const key in savedAttributes) {
+                const fieldId = `attr-modal-${key.replace(/[^a-zA-Z0-9]/g, '-')}`;
+                const field = document.getElementById(fieldId);
+                const attrDef = attributes?.find(a => a.name === key);
+
+                if (field && attrDef) { // It's a predefined attribute
+                    if (attrDef.type.toLowerCase() === 'measurement') {
+                        const [value, unit] = savedAttributes[key].split(' ');
+                        field.value = value;
+                        const unitField = document.getElementById(`${fieldId}-unit`);
+                        if (unitField) unitField.value = unit;
+                    } else if (attrDef.type.toLowerCase() === 'enum') {
+                        const isCustom = ![...field.options].some(opt => opt.value === savedAttributes[key]);
+                        if (isCustom) {
+                            field.value = 'Custom';
+                            const customInput = document.querySelector(`[data-custom-for="${fieldId}"]`);
+                            customInput.value = savedAttributes[key];
+                            customInput.style.display = 'block';
+                        } else {
+                            field.value = savedAttributes[key];
+                        }
+                    } else {
+                        field.value = savedAttributes[key];
+                    }
+                } else { // It's a custom key-value attribute
+                    addCustomAttributePair(key, savedAttributes[key]);
+                }
+            }
+        } catch (e) { console.error("Could not parse existing attributes:", e); }
+    }
+}
+
+function handleAttributeChange(element) {
+    if (element.tagName === 'SELECT' && element.dataset.attrName) {
+        const customInput = document.querySelector(`[data-custom-for="${element.id}"]`);
+        if (customInput) {
+            customInput.style.display = element.value === 'Custom' ? 'block' : 'none';
+        }
+    }
+}
+
+
+function addCustomAttributePair(key = '', value = '') {
+    const container = document.getElementById('custom-attributes-container');
+    const div = document.createElement('div');
+    div.className = 'custom-attribute-pair';
+    div.innerHTML = `
+        <input type="text" class="custom-attr-key" placeholder="Label (e.g., Special Feature)" value="${key}">
+        <input type="text" class="custom-attr-value" placeholder="Value (e.g., Water Resistant)" value="${value}">
+        <button type="button" class="btn btn-delete" onclick="this.parentElement.remove()" style="padding: 5px 10px;"><i class="fas fa-trash"></i></button>
+    `;
+    container.appendChild(div);
+}
+
+function saveAttributesFromModal() {
+    const attributes = {};
+    let attrCount = 0;
+    
+    document.querySelectorAll('#attributes-modal [data-attr-name]').forEach(field => {
+        const attrName = field.dataset.attrName;
+        let value = field.value;
+
+        if (field.tagName === 'SELECT' && value === 'Custom') {
+            const customInput = document.querySelector(`[data-custom-for="${field.id}"]`);
+            value = customInput ? customInput.value : '';
+        }
+        
+        const subcategoryRadio = document.querySelector('input[name="product-subcategory"]:checked');
+        if (!subcategoryRadio) return; // Should not happen but as a safeguard
+        const subCategoryName = subcategoryRadio.labels[0].textContent.trim().toLowerCase().replace(/&/g, 'and').replace(/\s+/g, ' ');
+        const attrDef = categoryAttributes[subCategoryName]?.find(a => a.name === attrName);
+
+        if (attrDef && attrDef.type.toLowerCase() === 'measurement' && value) {
+            const unitField = document.getElementById(`${field.id}-unit`);
+            value = `${value} ${unitField.value}`;
+        }
+        
+        if (value && value.trim() !== '') {
+            attributes[attrName] = value.trim();
+            attrCount++;
+        }
+    });
+
+    document.querySelectorAll('.custom-attribute-pair').forEach(pair => {
+        const key = pair.querySelector('.custom-attr-key').value.trim();
+        const value = pair.querySelector('.custom-attr-value').value.trim();
+        if (key && value) {
+            attributes[key] = value;
+            attrCount++;
+        }
+    });
+
+    if (attrCount < 2) {
+        showConfirmation("Please fill in at least two attributes before saving.", null, "More Information Needed");
+        return;
+    }
+
+    document.getElementById('product-attributes-data').value = JSON.stringify(attributes);
+    document.getElementById('attributes-status').textContent = `${attrCount} attribute(s) added.`;
+    closeModal('attributes-modal');
+}
+/* ---------- END: DYNAMIC ATTRIBUTE FUNCTIONS ---------- */
+
+
 async function handleProductSubmit(e) {
     e.preventDefault();
     const submitBtn = document.getElementById('submit-product-btn');
@@ -1324,6 +1558,12 @@ async function handleProductSubmit(e) {
     try {
         const productId = document.getElementById('product-id').value;
         const isEdit = !!productId;
+
+        const attributesData = document.getElementById('product-attributes-data').value;
+        const attributes = attributesData ? JSON.parse(attributesData) : {};
+        if (Object.keys(attributes).length < 2) {
+            throw new Error("You must add at least two product attributes before saving.");
+        }
 
         const selectedSubCategory = document.querySelector('#product-sub-category-checkboxes input:checked');
         const selectedCategoryId = selectedSubCategory ? parseInt(selectedSubCategory.value) : null;
@@ -1359,6 +1599,13 @@ async function handleProductSubmit(e) {
         }
         const packageInfo = [dimsPart, weightPart].filter(Boolean).join(', ');
 
+        const seasonSelect = document.getElementById('product-season');
+        let seasonValue = seasonSelect.value;
+        if (seasonValue === 'Custom') {
+            seasonValue = document.getElementById('product-season-custom').value.trim();
+        } else if (seasonValue === 'NULL') {
+            seasonValue = null;
+        }
 
         const productData = {
             title: document.getElementById('product-title').value,
@@ -1373,7 +1620,9 @@ async function handleProductSubmit(e) {
             supplier_id: state.supplier.id,
             category_id: selectedCategoryId,
             shipping_details: document.getElementById('shipping-details').value,
-            package_information: packageInfo || null
+            package_information: packageInfo || null,
+            attributes: attributes,
+            season: seasonValue
         };
         
         const { data: productResult, error: productError } = isEdit
@@ -2101,9 +2350,9 @@ async function handleUpdateAccount(e) {
 
         const { data, error } = await db.from('suppliers').update(updatedData).eq('id', state.supplier.id).select().single();
         if (error) throw error;
-        state.supplier = data; // IMPORTANT: Update local state with new data
+        state.supplier = data;
         messageDiv.innerHTML = `<div class="success-message">Account updated successfully!</div>`;
-        loadAccount(); // Reload to show new picture from updated state
+        loadAccount();
     } catch (error) {
         messageDiv.innerHTML = `<div class="error-message">Error: ${error.message}</div>`;
     } finally {
@@ -2114,14 +2363,12 @@ async function handleUpdateAccount(e) {
 async function calculateSupplierEarnings() {
     if (!state.supplier) return { totalEarnings: 0, totalWithdrawn: 0, availableBalance: 0 };
 
-    // 1. Calculate Total Earnings from delivered orders
     const { data: deliveredOrders, error: ordersError } = await db.rpc('get_orders_for_supplier', { p_supplier_id: state.supplier.id });
     if (ordersError) throw ordersError;
     const totalEarnings = (deliveredOrders || [])
         .filter(order => order.status === 'Delivered')
         .reduce((sum, order) => sum + (order.total_price || 0), 0);
 
-    // 2. Calculate Total Withdrawn amount
     const { data: successfulWithdrawals, error: withdrawalsError } = await db
         .from('supplier_withdrawals')
         .select('amount')
@@ -2130,7 +2377,6 @@ async function calculateSupplierEarnings() {
     if (withdrawalsError) throw withdrawalsError;
     const totalWithdrawn = successfulWithdrawals.reduce((sum, w) => sum + w.amount, 0);
 
-    // 3. Calculate Available Balance
     const availableBalance = totalEarnings - totalWithdrawn;
 
     state.earnings = { totalEarnings, totalWithdrawn, availableBalance };
@@ -2141,54 +2387,57 @@ async function calculateSupplierEarnings() {
 async function loadPayment() {
     const page = document.getElementById('payment');
     page.innerHTML = `<div class="page-header"><h1 class="main-header">Payment & Withdrawals</h1></div><div class="card"><p>Loading payment information...</p></div>`;
-    showLoader('Calculating earnings...');
+    showLoader('Checking payment status...');
     try {
-        await calculateSupplierEarnings();
+        const { data: paymentMethods, error: methodsError } = await db.from('supplier_payment_methods').select('id').eq('supplier_id', state.supplier.id).limit(1);
+        if (methodsError) throw methodsError;
 
-        const { data: withdrawals, error: withdrawalsError } = await db
-            .from('supplier_withdrawals')
-            .select('*, payment_method:supplier_payment_methods(*)')
-            .eq('supplier_id', state.supplier.id)
-            .order('requested_at', { ascending: false });
-        if (withdrawalsError) throw withdrawalsError;
-
-        page.innerHTML = `
-            <div class="page-header">
-                <h1 class="main-header">Payment & Withdrawals</h1>
-                <button class="btn btn-primary" onclick="showWithdrawalModal()"><i class="fas fa-hand-holding-usd"></i> Request Withdrawal</button>
-            </div>
-            
-            <div class="earnings-summary-container">
-                <div class="summary-card paid">
-                    <h3>Total Paid</h3>
-                    <p>PKR ${state.earnings.totalWithdrawn.toLocaleString()}</p>
+        if (paymentMethods.length === 0) {
+            page.innerHTML = `
+                <div class="page-header"><h1 class="main-header">Payment & Withdrawals</h1></div>
+                <div class="card add-account-container">
+                    <i class="fas fa-credit-card"></i>
+                    <h3>No Payment Method Found</h3>
+                    <p>Please add a payment method to receive your earnings.</p>
+                    <button class="btn btn-primary" onclick="showAddPaymentMethodModal()">Add Account</button>
                 </div>
-                <div class="summary-card balance">
-                    <h3>Remaining Balance</h3>
-                    <p>PKR ${state.earnings.availableBalance.toLocaleString()}</p>
+            `;
+        } else {
+            await calculateSupplierEarnings();
+            const { data: withdrawals, error: withdrawalsError } = await db
+                .from('supplier_withdrawals')
+                .select('*, payment_method:supplier_payment_methods(*)')
+                .eq('supplier_id', state.supplier.id)
+                .order('requested_at', { ascending: false });
+            if (withdrawalsError) throw withdrawalsError;
+
+            page.innerHTML = `
+                <div class="page-header">
+                    <h1 class="main-header">Payment & Withdrawals</h1>
+                    <button class="btn btn-primary" onclick="showWithdrawalModal()"><i class="fas fa-hand-holding-usd"></i> Request Withdrawal</button>
                 </div>
-            </div>
-
-            <div class="card">
-                <h3>Transaction History</h3>
-                ${withdrawals.length > 0 ? `
-                <table class="content-table">
-                    <thead><tr><th>Request Date</th><th>Amount</th><th>Status</th><th>Payment To</th></tr></thead>
-                    <tbody>
-                        ${withdrawals.map(w => `
-                            <tr>
-                                <td data-label="Date">${new Date(w.requested_at).toLocaleString()}</td>
-                                <td data-label="Amount">PKR ${w.amount.toLocaleString()}</td>
-                                <td data-label="Status"><span class="status-badge ${w.status}">${w.status}</span></td>
-                                <td data-label="Payment To">${w.payment_method ? `${w.payment_method.provider_name} (${w.payment_method.account_number})` : 'N/A'}</td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-                ` : `<p style="text-align:center; padding: 20px;">No withdrawal requests yet.</p>`}
-            </div>
-        `;
-
+                <div class="earnings-summary-container">
+                    <div class="summary-card paid"><h3>Total Paid</h3><p>PKR ${state.earnings.totalWithdrawn.toLocaleString()}</p></div>
+                    <div class="summary-card balance"><h3>Remaining Balance</h3><p>PKR ${state.earnings.availableBalance.toLocaleString()}</p></div>
+                </div>
+                <div class="card">
+                    <h3>Transaction History</h3>
+                    ${withdrawals.length > 0 ? `
+                    <table class="content-table">
+                        <thead><tr><th>Request Date</th><th>Amount</th><th>Status</th><th>Payment To</th></tr></thead>
+                        <tbody>
+                            ${withdrawals.map(w => `
+                                <tr>
+                                    <td data-label="Date">${new Date(w.requested_at).toLocaleString()}</td>
+                                    <td data-label="Amount">PKR ${w.amount.toLocaleString()}</td>
+                                    <td data-label="Status"><span class="status-badge ${w.status}">${w.status}</span></td>
+                                    <td data-label="Payment To">${w.payment_method ? `${w.payment_method.provider_name} (${w.payment_method.account_number})` : 'N/A'}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>` : `<p style="text-align:center; padding: 20px;">No withdrawal requests yet.</p>`}
+                </div>`;
+        }
     } catch (err) {
         page.innerHTML = `<div class="error-message">Error loading payment info: ${err.message}</div>`;
     } finally {
@@ -2196,9 +2445,66 @@ async function loadPayment() {
     }
 }
 
+function showAddPaymentMethodModal() {
+    const modal = document.getElementById('add-payment-modal');
+    modal.innerHTML = `
+        <div class="modal" style="max-width: 500px;">
+            <h2>Add Payment Method</h2>
+            <form id="add-payment-form">
+                <div class="form-group">
+                    <label for="payment-provider">Provider</label>
+                    <select id="payment-provider" required>
+                        <option value="">Select Provider...</option>
+                        <option value="EasyPaisa">EasyPaisa</option>
+                        <option value="JazzCash">JazzCash</option>
+                        <option value="U-Paisa">U-Paisa</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="account-name">Account Holder Name</label>
+                    <input type="text" id="account-name" required>
+                </div>
+                 <div class="form-group">
+                    <label for="account-number">Account Number</label>
+                    <input type="text" id="account-number" required>
+                </div>
+                <div style="text-align:right; margin-top:20px;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('add-payment-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Method</button>
+                </div>
+            </form>
+        </div>
+    `;
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('visible'), 10);
+    document.getElementById('add-payment-form').addEventListener('submit', handleSavePaymentMethod);
+}
+
+async function handleSavePaymentMethod(event) {
+    event.preventDefault();
+    showLoader("Saving...");
+    try {
+        const paymentData = {
+            supplier_id: state.supplier.id,
+            provider_name: document.getElementById('payment-provider').value,
+            account_holder_name: document.getElementById('account-name').value,
+            account_number: document.getElementById('account-number').value,
+        };
+        const { error } = await db.from('supplier_payment_methods').insert(paymentData);
+        if (error) throw error;
+        
+        closeModal('add-payment-modal');
+        await loadPayment();
+    } catch (err) {
+        showConfirmation(`Error saving payment method: ${err.message}`, null, 'Error');
+    } finally {
+        hideLoader();
+    }
+}
+
 
 async function showWithdrawalModal() {
-    await calculateSupplierEarnings(); // Recalculate just in case
+    await calculateSupplierEarnings();
     const { availableBalance } = state.earnings;
     if (availableBalance <= 0) {
         showConfirmation("You do not have any funds available for withdrawal.", null, "No Balance");
@@ -2475,21 +2781,16 @@ function openVariantManager() {
                         <p style="margin-top: 10px; font-weight: 500;">Selected: <span id="selected-color-name">None</span></p>
                     </div>
                     <div class="variant-step" style="animation-delay: 0.1s;">
-                        <h3><i class="fas fa-ruler-combined"></i> 2. Define Size</h3>
+                        <h3><i class="fas fa-ruler-combined"></i> 2. Define Size / Type</h3>
                         <div class="form-group">
                             <select id="size-category-selector" onchange="renderSizeInputs()">
                                 <option value="">Choose a product type...</option>
                                 <option value="stitched_cloth">Stitched Apparel</option>
-                                <option value="unstitched_cloth">Unstitched Fabric</option>
-                                <option value="shoes">Shoes</option>
-                                <option value="mobiles">Mobiles & Accessories</option>
-                                <option value="diapers">Diapers / Baby & Mother</option>
-                                <option value="books">Books</option>
-                                <option value="jewelry">Jewelry</option>
-                                <option value="fitness">Gym & Fitness</option>
-                                <option value="liquid">Liquid-Based Products</option>
-                                <option value="dimension">Dimension-Based Products</option>
-                                <option value="custom">Custom Size</option>
+                                <option value="number_based">Number-Based (Shoes, Trousers)</option>
+                                <option value="womens_handbags">Women's Handbags (Dimensions)</option>
+                                <option value="jewelry">Jewelry (Dimensions)</option>
+                                <option value="kitchenware">Kitchenware</option>
+                                <option value="custom">Custom Value</option>
                             </select>
                         </div>
                         <div id="size-inputs-container"></div>
@@ -2557,17 +2858,12 @@ function renderSizeInputs() {
     const container = document.getElementById('size-inputs-container');
     let html = '';
     switch (category) {
-        case 'stitched_cloth': html = `<div class="form-group"><label>Standard Size</label><select id="stitched-size"><option>Extra Small</option><option>Small</option><option>Medium</option><option>Large</option><option>Extra Large</option><option>XXL</option><option>XXXL</option></select></div>`; break;
-        case 'unstitched_cloth': html = `<div class="form-group"><label>Fabric Length (Gaz/Yards)</label><input type="number" id="unstitched-gaz" placeholder="e.g., 3"></div>`; break;
-        case 'shoes': html = `<div class="form-group"><label>Standard Size (EU)</label><select id="shoe-size">${[...Array(21).keys()].map(i => `<option>${i + 30}</option>`).join('')}</select></div>`; break;
-        case 'mobiles': html = `<div class="form-group"><label>RAM</label><select id="mobile-ram"><option>2GB</option><option>3GB</option><option>4GB</option><option>6GB</option><option>8GB</option><option>12GB</option><option>16GB</option><option>24GB</option><option>32GB</option></select></div><div class="form-group"><label>Storage</label><select id="mobile-storage"><option>16GB</option><option>32GB</option><option>64GB</option><option>128GB</option><option>256GB</option><option>512GB</option><option>1TB</option><option>2TB</option></select></div><div class="form-group"><label>Screen (inches)</label><input type="number" id="mobile-screen" step="0.1" placeholder="e.g., 6.5"></div>`; break;
-        case 'diapers': html = `<div class="form-group"><label>Diaper Size</label><select id="diaper-size"><option>Newborn</option><option>Small (S)</option><option>Medium (M)</option><option>Large (L)</option><option>Extra Large (XL)</option></select></div><div class="form-group"><label>Pack Count</label><input type="number" id="diaper-count" placeholder="e.g., 80"></div>`; break;
-        case 'books': html = `<div class="form-group"><label>Format</label><select id="book-format"><option>Paperback</option><option>Hardcover</option></select></div><div class="form-group"><label>Language</label><input id="book-lang" type="text" placeholder="e.g., English"></div>`; break;
-        case 'jewelry': html = `<div class="form-group"><label>Ring Size (US)</label><input type="number" id="ring-size" step="0.5" placeholder="e.g., 7.5"></div><div class="form-group"><label>Material</label><input id="jewelry-material" type="text" placeholder="e.g., 18k Gold Plated"></div>`; break;
-        case 'fitness': html = `<div class="form-group" style="display:flex; align-items:flex-end; gap:10px;"><div style="flex-grow:1;"><label>Weight</label><input type="number" id="fitness-weight"></div><div><select id="fitness-unit"><option value="kg">kg</option><option value="lbs">lbs</option></select></div></div>`; break;
-        case 'liquid': html = `<div class="form-group" style="display:flex; align-items:flex-end; gap:10px;"><div style="flex-grow:1;"><label>Amount</label><input type="number" id="liquid-amount"></div><div><select id="liquid-unit"><option value="ml">ml</option><option value="L">L</option></select></div></div>`; break;
-        case 'dimension': html = `<div class="form-group"><label>Dimensions</label><div style="display:flex; align-items:flex-end; gap:10px;"><div style="flex-grow:1;"><input type="number" id="dim-length" placeholder="L"></div><div style="flex-grow:1;"><input type="number" id="dim-width" placeholder="W"></div><div style="flex-grow:1;"><input type="number" id="dim-height" placeholder="H"></div><div><select id="dim-unit"><option value="in">in</option><option value="cm">cm</option></select></div></div></div><div class="form-group"><label>Weight Capacity</label><input type="text" id="dim-capacity" placeholder="e.g., 100 kg"></div>`; break;
-        case 'custom': html = `<div class="form-group"><label>Custom Size</label><input type="text" id="custom-size" placeholder="Enter custom value"></div>`; break;
+        case 'stitched_cloth': html = `<div class="form-group"><label>Standard Size</label><select id="stitched-size"><option>Extra Small</option><option>Small</option><option>Medium</option><option>Large</option><option>Extra Large</option><option>XXL</option></select></div>`; break;
+        case 'number_based': html = `<div class="form-group"><label>Numerical/Standard Size</label><input type="text" id="number-size" placeholder="e.g., 8, 32, XL"></div>`; break;
+        case 'womens_handbags': html = `<label>Dimensions</label><div style="display:flex; gap:5px;"><input type="number" id="dim-l" placeholder="L"><input type="number" id="dim-w" placeholder="W"><input type="number" id="dim-h" placeholder="H"><select id="dim-unit"><option value="in">in</option><option value="cm">cm</option></select></div>`; break;
+        case 'jewelry': html = `<label>Dimensions</label><div style="display:flex; gap:5px;"><input type="number" id="jewel-dim1" placeholder="e.g., Length"><input type="number" id="jewel-dim2" placeholder="e.g., Thickness"><select id="jewel-unit"><option value="cm">cm</option><option value="mm">mm</option></select></div>`; break;
+        case 'kitchenware': html = `<label>Capacity</label><div style="display:flex; gap:5px;"><input type="number" id="kit-cap" placeholder="e.g., 1.5"><select id="kit-cap-unit"><option value="L">L</option><option value="kg">kg</option><option value="ml">ml</option></select></div><label>Pack Of</label><input type="number" id="kit-pack" placeholder="e.g., 6">`; break;
+        case 'custom': html = `<div class="form-group"><label>Custom Value</label><input type="text" id="custom-size" placeholder="Enter custom value"></div>`; break;
     }
     container.innerHTML = html;
 }
@@ -2579,15 +2875,10 @@ function addVariantToList() {
     
     switch (sizeCategory) {
         case 'stitched_cloth': sizeString = document.getElementById('stitched-size').value; break;
-        case 'unstitched_cloth': sizeString = `Unstitched (${document.getElementById('unstitched-gaz').value} Gaz)`; break;
-        case 'shoes': sizeString = `EU ${document.getElementById('shoe-size').value}`; break;
-        case 'mobiles': sizeString = `${document.getElementById('mobile-ram').value} RAM, ${document.getElementById('mobile-storage').value}`; break;
-        case 'diapers': sizeString = `${document.getElementById('diaper-size').value} - ${document.getElementById('diaper-count').value} count`; break;
-        case 'books': sizeString = `${document.getElementById('book-format').value}, ${document.getElementById('book-lang').value}`; break;
-        case 'jewelry': sizeString = `Ring Size ${document.getElementById('ring-size').value}, ${document.getElementById('jewelry-material').value}`; break;
-        case 'fitness': sizeString = `${document.getElementById('fitness-weight').value}${document.getElementById('fitness-unit').value}`; break;
-        case 'liquid': sizeString = `${document.getElementById('liquid-amount').value}${document.getElementById('liquid-unit').value}`; break;
-        case 'dimension': const cap = document.getElementById('dim-capacity').value; sizeString = `${document.getElementById('dim-length').value}x${document.getElementById('dim-width').value}x${document.getElementById('dim-height').value} ${document.getElementById('dim-unit').value}${cap ? ` (Max ${cap})` : ''}`; break;
+        case 'number_based': sizeString = document.getElementById('number-size').value; break;
+        case 'womens_handbags': sizeString = `${document.getElementById('dim-l').value}x${document.getElementById('dim-w').value}x${document.getElementById('dim-h').value} ${document.getElementById('dim-unit').value}`; break;
+        case 'jewelry': sizeString = `${document.getElementById('jewel-dim1').value} x ${document.getElementById('jewel-dim2').value} ${document.getElementById('jewel-unit').value}`; break;
+        case 'kitchenware': const capacity = `${document.getElementById('kit-cap').value}${document.getElementById('kit-cap-unit').value}`; const pack = `Pack of ${document.getElementById('kit-pack').value}`; sizeString = `${capacity}, ${pack}`; break;
         case 'custom': sizeString = document.getElementById('custom-size').value; break;
         default: showConfirmation('Please select a product type to define the size.', null, 'Missing Information'); return;
     }
@@ -2653,9 +2944,9 @@ function renderVariantDisplay() {
     }
 }
 
-const handleImageUpload = (e) => { const files = e.target.files, previewsContainer = document.getElementById('image-previews'); for (let i=0; i<files.length; i++) { const file = files[i], total = newFiles.length + previewsContainer.querySelectorAll('.preview-image-container[data-url]').length; if (total >= 7) { showConfirmation('You can upload a maximum of 7 images.', null, 'Upload Limit'); break; } newFiles.push(file); const reader = new FileReader(); reader.onload = (event) => { const preview = document.createElement('div'); preview.className = 'preview-image-container'; const fileIndex = newFiles.length - 1; preview.innerHTML = `<img src="${event.target.result}" class="preview-image"><button type="button" class="delete-preview-btn" onclick="removeNewImage(this, ${fileIndex})">×</button>`; previewsContainer.appendChild(preview); }; reader.readAsDataURL(file); } e.target.value = ''; };
+const handleImageUpload = (e) => { const files = e.target.files, previewsContainer = document.getElementById('image-previews'); for (let i=0; i<files.length; i++) { const file = files[i], total = newFiles.filter(f => f).length + previewsContainer.querySelectorAll('.preview-image-container[data-url]:not([data-removed="true"])').length; if (total >= 8) { showConfirmation('You can upload a maximum of 8 images.', null, 'Upload Limit'); break; } newFiles.push(file); const reader = new FileReader(); reader.onload = (event) => { const preview = document.createElement('div'); preview.className = 'preview-image-container'; const fileIndex = newFiles.length - 1; preview.innerHTML = `<img src="${event.target.result}" class="preview-image"><button type="button" class="delete-preview-btn" onclick="removeNewImage(this, ${fileIndex})">×</button>`; previewsContainer.appendChild(preview); }; reader.readAsDataURL(file); } e.target.value = ''; };
 const removeNewImage = (btn, index) => { newFiles[index] = null; btn.parentElement.remove(); };
-const removeExistingImage = (btn) => { showConfirmation('Mark image for deletion? It will be removed when you save.', () => { const p = btn.parentElement; p.style.opacity = '0.5'; p.dataset.removed = 'true'; }); };
+const removeExistingImage = (btn) => { const p = btn.parentElement; p.style.opacity = '0.5'; p.dataset.removed = 'true'; };
 
 const handleVideoUpload = (event) => {
     const file = event.target.files[0];
@@ -2712,7 +3003,7 @@ function renderProfilePicture(userOrSupplier, context) {
     const initial = name.charAt(0).toUpperCase();
 
     if (context === 'sidebar') {
-        return ''; // No profile picture in sidebar header
+        return '';
     }
 
     const previewId = context === 'account' ? 'account-profile-pic-preview' : '';
@@ -2742,18 +3033,70 @@ function closeModal(modalId) {
         modalOverlay.classList.remove('visible');
         setTimeout(() => {
             modalOverlay.style.display = 'none';
-            modalOverlay.innerHTML = ''; // Clear content to prevent event listener buildup
+            modalOverlay.innerHTML = '';
         }, 300);
     }
+}
+
+function setupDraggableWhatsAppButton() {
+    const fab = document.querySelector('.whatsapp-fab');
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    const move = (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+        const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+        
+        let newX = clientX - offsetX;
+        let newY = clientY - offsetY;
+
+        // Constrain to viewport
+        const fabRect = fab.getBoundingClientRect();
+        const max_X = window.innerWidth - fabRect.width;
+        const max_Y = window.innerHeight - fabRect.height;
+        
+        newX = Math.max(0, Math.min(newX, max_X));
+        newY = Math.max(0, Math.min(newY, max_Y));
+        
+        fab.style.left = `${newX}px`;
+        fab.style.top = `${newY}px`;
+        fab.style.right = 'auto'; // Override initial CSS
+        fab.style.bottom = 'auto'; // Override initial CSS
+    };
+
+    const startDrag = (e) => {
+        isDragging = true;
+        const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+        const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+        const rect = fab.getBoundingClientRect();
+        offsetX = clientX - rect.left;
+        offsetY = clientY - rect.top;
+        document.addEventListener('mousemove', move);
+        document.addEventListener('touchmove', move, { passive: false });
+    };
+
+    const stopDrag = () => {
+        isDragging = false;
+        document.removeEventListener('mousemove', move);
+        document.removeEventListener('touchmove', move);
+    };
+
+    fab.addEventListener('mousedown', startDrag);
+    fab.addEventListener('touchstart', startDrag, { passive: false });
+
+    document.addEventListener('mouseup', stopDrag);
+    document.addEventListener('touchend', stopDrag);
 }
 
 // Make functions globally available
 Object.assign(window, {
     showAddProductForm, editProduct, deleteProduct, viewOrderDetail, updateOrderStatus,
     handleImageUpload, removeNewImage, removeExistingImage, handleMessageKeypress, sendMessage, loadPayment,
-    showWithdrawalModal, closeModal,
+    showWithdrawalModal, closeModal, openAttributesManager, saveAttributesFromModal, showAddPaymentMethodModal,
     openChatDetail, closeChatDetail, handleVideoUpload, removeVideoPreview, deleteOrder,
-    previewImage, previewProfileImage, viewReviewDetail,
+    previewImage, previewProfileImage, viewReviewDetail, handleAttributeChange, addCustomAttributePair,
     openVariantManager, filterColors, selectColor, renderSizeInputs, addVariantToList, removeVariant, saveVariantsAndClose
 });
 </script>
