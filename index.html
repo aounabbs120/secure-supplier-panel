@@ -69,6 +69,7 @@
     .btn-secondary { background: var(--white); border: 1px solid var(--border-color); color: var(--text-dark); }
     .btn-delete { background: linear-gradient(90deg, #ef4444, #f97316); color: white; }
     .btn-edit { background: linear-gradient(90deg, var(--info), #60a5fa); color: white; margin-right:8px; }
+    .btn-view { background: linear-gradient(90deg, var(--info), #60a5fa); color: white; }
     .btn-warning { background: linear-gradient(90deg, var(--warning), #fbbf24); color: white; }
     .btn-success { background: linear-gradient(90deg, var(--success), #4ade80); color: white; }
     .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); z-index:1000; display:none; justify-content:center; align-items:center; transition: opacity 0.3s ease; }
@@ -247,9 +248,11 @@
     .summary-card.paid { background: linear-gradient(45deg, var(--success), #22c55e); }
     .summary-card.balance { background: linear-gradient(45deg, var(--info), #60a5fa); }
     .status-badge { padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; color: white; text-transform: capitalize; }
-    .status-badge.processing { background-color: var(--warning); }
-    .status-badge.successful { background-color: var(--success); }
-    .status-badge.canceled { background-color: var(--danger); }
+    .status-badge.processing, .status-badge.pending { background-color: var(--warning); }
+    .status-badge.successful, .status-badge.active { background-color: var(--success); }
+    .status-badge.canceled, .status-badge.rejected { background-color: var(--danger); }
+    .status-badge.awaiting-payment { background-color: var(--info); }
+    .status-badge.expired { background-color: var(--text-light); }
     
     .whatsapp-fab {
       position: fixed;
@@ -311,6 +314,40 @@
     .custom-attribute-pair input { flex: 1; }
     #payment .add-account-container { text-align: center; padding: 50px 20px; }
     #payment .add-account-container i { font-size: 4rem; color: var(--primary-color); margin-bottom: 20px; }
+
+    /* --- PROMOTION STYLES START --- */
+    .promotion-steps-container { position: relative; padding-top: 20px; }
+    .promotion-step-content { display: none; }
+    .promotion-step-content.active { display: block; animation: page-fade-in 0.5s; }
+    .product-selection-list { max-height: 400px; overflow-y: auto; padding: 10px; background-color: var(--secondary-color); border-radius: 8px; }
+    .product-selection-item { display: flex; align-items: center; padding: 12px; background-color: var(--white); border-radius: 8px; margin-bottom: 10px; border: 2px solid transparent; cursor: pointer; transition: all 0.2s ease; }
+    .product-selection-item:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .product-selection-item.selected { border-color: var(--primary-color); background-color: #eef2ff; }
+    .product-selection-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; margin-right: 15px; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+    .pricing-card { border: 2px solid var(--border-color); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s ease-out; }
+    .pricing-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+    .pricing-card.selected { border-color: var(--primary-color); background-color: #eef2ff; box-shadow: 0 0 15px rgba(79, 70, 229, 0.3); }
+    .pricing-card h4 { margin: 0 0 5px 0; color: var(--primary-color); }
+    .pricing-card p { margin: 0; font-size: 1.5rem; font-weight: 700; }
+    .confirmation-summary { background-color: var(--secondary-color); padding: 20px; border-radius: 12px; }
+    .confirmation-summary h4 { margin-top: 0; }
+    .confirmation-summary p { margin: 8px 0; }
+    .payment-account-card { background: var(--white); border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 5px solid var(--primary-color); text-align: left; box-shadow: var(--shadow); opacity: 0; animation: card-fade-in 0.5s ease-out forwards; }
+    .payment-account-card h3 { margin: 0 0 10px; color: var(--primary-color); display: flex; align-items: center; gap: 10px; }
+    .payment-account-card p { margin: 5px 0; font-size: 1.1rem; }
+    .payment-account-card p strong { color: var(--text-dark); }
+    .important-notice { background-color: #fffbeb; border: 1px solid #fde68a; color: #b45309; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: left; opacity: 0; animation: card-fade-in 0.5s 0.3s ease-out forwards;}
+    .important-notice p { margin: 0; }
+    .important-notice strong { color: #92400e; }
+    #payment-info-modal .modal-content { text-align: center; }
+    #payment-info-modal .payment-account-card:nth-of-type(2) { animation-delay: 0.15s; }
+    #promotion-detail-modal-content { display: flex; flex-direction: column; gap: 15px; }
+    #promotion-detail-modal-content .detail-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+    #promotion-detail-modal-content .detail-row:last-child { border-bottom: none; }
+    #promotion-detail-modal-content .detail-label { font-weight: 600; color: var(--text-light); }
+    .content-table .btn { margin: 2px; }
+    /* --- PROMOTION STYLES END --- */
 
     @media (max-width: 1024px) {
         .dashboard-charts-container { grid-template-columns: 1fr; }
@@ -424,12 +461,11 @@
           <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
           <li><a href="#products" class="nav-link">My Products</a></li>
           <li><a href="#orders" class="nav-link">My Orders<span class="notification-dot"></span></a></li>
+          <li><a href="#promotions" class="nav-link">Promotions</a></li>
           <li><a href="#reviews" class="nav-link">Reviews</a></li>
           <li><a href="#chat" class="nav-link">Chat with Users<span class="notification-dot"></span></a></li>
           <li><a href="#account" class="nav-link">Your Account</a></li>
           <li><a href="#payment" class="nav-link">Payment Info</a></li>
-          <li><a href="#messages-from-admin" class="nav-link">Messages from Admin<span class="notification-dot"></span></a></li>
-          <li><a href="#message-to-admin" class="nav-link">Message to Admin</a></li>
         </ul>
         <div class="sidebar-social-icons">
             <a href="https://www.facebook.com/share/1A6fShxiZf/" target="_blank" class="sidebar-social-link facebook"><i class="fab fa-facebook"></i></a>
@@ -448,12 +484,11 @@
         <section id="dashboard" class="page"></section>
         <section id="products" class="page"></section>
         <section id="orders" class="page"></section>
+        <section id="promotions" class="page"></section>
         <section id="reviews" class="page"></section>
         <section id="chat" class="page"></section>
         <section id="account" class="page"></section>
         <section id="payment" class="page"></section>
-        <section id="messages-from-admin" class="page"></section>
-        <section id="message-to-admin" class="page"></section>
       </main>
     </div>
   </div>
@@ -465,6 +500,9 @@
   <div id="review-detail-modal" class="modal-overlay"></div>
   <div id="withdrawal-modal" class="modal-overlay"></div>
   <div id="attributes-modal" class="modal-overlay"></div>
+  <div id="promotion-request-modal" class="modal-overlay"></div>
+  <div id="payment-info-modal" class="modal-overlay"></div>
+  <div id="promotion-detail-modal" class="modal-overlay"></div>
   
   <div id="loader-overlay" class="modal-overlay" style="flex-direction: column;">
     <div class="loader-spinner"></div>
@@ -532,7 +570,6 @@ async function fetchConfig() {
 //                              -- END OF CONFIGURATION --
 //
 // =================================================================================== */
-
 // Data constants
 const signupCategories = ["Fashion Accessories", "Auto Accessories", "Electronics", "Home & Kitchen", "Beauty & Personal Care", "Sports & Outdoors", "Books", "Toys & Games", "Health & Household", "Industrial & Scientific"];
 const pakistanCities = ["Abbottabad","Bahawalpur","Faisalabad","Gujranwala","Gujrat","Hyderabad","Islamabad","Karachi","Lahore","Larkana","Mardan","Mirpur","Multan","Muzaffarabad","Peshawar","Quetta","Rahim Yar Khan","Rawalpindi","Sahiwal","Sargodha","Sheikhupura","Sialkot","Sukkur","Wah"].sort();
@@ -592,7 +629,7 @@ let state = {
   orders: [], 
   reviews: [],
   messages: [], 
-  adminMessages: [],
+  promotions: [],
   user: null, 
   supplier: null, 
   chatUsers: [], 
@@ -608,6 +645,8 @@ let productVariants = [];
 let tempSelectedColor = null;
 let salesChartInstance = null;
 let orderStatusChartInstance = null;
+let promotionRequestState = { step: 1, productId: null, productName: null, productImg: null, duration: null, price: null };
+let promotionPricingOptions = [];
 
 
 /* ---------- UI HELPERS ---------- */
@@ -673,9 +712,10 @@ confirmationModal.addEventListener('click', (e) => {
 document.addEventListener('DOMContentLoaded', initializeApp);
 
 async function initializeApp() {
-    await fetchConfig(); // <<<--- ADD THIS LINE to run our new function and wait for the keys.
+ await fetchConfig(); // <<<--- ADD THIS LINE to run our new function and wait for the keys.
 
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return; // <<<--- ADD THIS LINE to stop if keys didn't load.
+    
   db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   
   const { data: { session } } = await db.auth.getSession();
@@ -882,7 +922,7 @@ async function handleLogout() {
     realtimeChannel = null;
   }
   await db.auth.signOut();
-  state = { categories: [], products: [], orders: [], reviews: [], messages: [], adminMessages:[], user: null, supplier: null, chatUsers: [], activeChatUser: null };
+  state = { categories: [], products: [], orders: [], reviews: [], messages: [], promotions: [], user: null, supplier: null, chatUsers: [], activeChatUser: null };
   
   document.getElementById('app-wrapper').style.opacity = '0';
   setTimeout(() => {
@@ -988,20 +1028,13 @@ function handleNavigation(e) {
             checkAllNotifications();
         });
         break;
+    case 'promotions': loadPromotions(); break;
     case 'reviews': loadReviews(); break;
     case 'chat': 
         loadChat().then(() => checkAllNotifications());
         break;
     case 'account': loadAccount(); break;
     case 'payment': loadPayment(); break;
-    case 'messages-from-admin': 
-        loadMessagesFromAdmin().then(() => {
-            const latestAdminMessage = state.adminMessages[0];
-            if(latestAdminMessage) localStorage.setItem('lastSeenAdminMessageId', latestAdminMessage.id);
-            checkAllNotifications();
-        });
-        break;
-    case 'message-to-admin': loadMessageToAdmin(); break;
   }
 }
 
@@ -2585,60 +2618,6 @@ async function handleWithdrawalRequest(event) {
 }
 
 
-async function loadMessagesFromAdmin() {
-    const page = document.getElementById('messages-from-admin');
-    page.innerHTML = `<div class="page-header"><h1 class="main-header">Messages from Admin</h1></div><p>Loading...</p>`;
-    showLoader();
-    try {
-        const { data, error } = await db.from('messages').select('*').eq('sender_type', 'admin').eq('recipient_id', state.user.id).order('created_at', { ascending: false });
-        if (error) throw error;
-        
-        state.adminMessages = data || [];
-
-        let content = '<div class="card"><h3>Admin Communications</h3>';
-        if (state.adminMessages.length > 0) {
-            content += state.adminMessages.map(msg => `<div class="message received" style="align-self: flex-start; margin-bottom: 10px; background-color: #e2e8f0; color: var(--text-dark); border-radius: 12px; padding: 10px 15px;"><p style="margin:0;">${msg.body}</p><div class="message-time" style="font-size: 0.75rem; color: var(--text-light); text-align: right; margin-top: 5px;">${new Date(msg.created_at).toLocaleString()}</div></div>`).join('');
-        } else {
-            content += '<p>No messages from admin.</p>';
-        }
-        content += '</div>';
-        page.innerHTML = `<div class="page-header"><h1 class="main-header">Messages from Admin</h1></div>${content}`;
-    } catch (error) {
-        page.innerHTML = `<div class="error-message">Error: ${error.message}</div>`;
-    } finally {
-        hideLoader();
-    }
-}
-function loadMessageToAdmin() {
-  document.getElementById('message-to-admin').innerHTML = `
-    <div class="page-header"><h1 class="main-header">Message to Admin</h1></div>
-    <div class="card"><h3>Contact Admin</h3>
-      <form id="admin-message-form">
-          <div class="form-group"><label for="admin-msg-body">Your Message</label><textarea id="admin-msg-body" rows="5" required></textarea></div>
-          <button type="submit" class="btn btn-primary">Send</button>
-          <div id="admin-message-status" style="margin-top: 15px;"></div>
-      </form>
-    </div>`;
-  document.getElementById('admin-message-form').addEventListener('submit', handleSendMessageToAdmin);
-}
-async function handleSendMessageToAdmin(e) {
-    e.preventDefault();
-    const content = document.getElementById('admin-msg-body').value.trim();
-    const statusDiv = document.getElementById('admin-message-status');
-    if (!content) return;
-    showLoader();
-    try {
-        const { error } = await db.from('messages').insert({ sender_id: state.user.id, recipient_type: 'admin', body: content, is_read: false, sender_type: 'supplier'});
-        if (error) throw error;
-        statusDiv.innerHTML = `<div class="success-message">Message sent!</div>`;
-        document.getElementById('admin-msg-body').value = '';
-    } catch (error) {
-        statusDiv.innerHTML = `<div class="error-message">Error: ${error.message}</div>`;
-    } finally {
-        hideLoader();
-    }
-}
-
 /* ---------- NOTIFICATIONS ---------- */
 async function checkAllNotifications() {
     if (!state.supplier || !state.user) return;
@@ -2657,10 +2636,6 @@ async function checkAllNotifications() {
 
         const { count: unreadChatCount } = await db.from('chat_messages').select('*', { count: 'exact', head: true }).eq('recipient_id', state.user.id).neq('status', 'seen');
         document.querySelector('a[href="#chat"] .notification-dot').style.display = (unreadChatCount > 0) ? 'block' : 'none';
-
-        const lastSeenAdminMessageId = localStorage.getItem('lastSeenAdminMessageId') || '0';
-        const { data: latestAdminMsg } = await db.from('messages').select('id').eq('sender_type', 'admin').eq('recipient_id', state.user.id).order('id', { ascending: false }).limit(1).single();
-        document.querySelector('a[href="#messages-from-admin"] .notification-dot').style.display = (latestAdminMsg && latestAdminMsg.id > parseInt(lastSeenAdminMessageId)) ? 'block' : 'none';
         
     } catch(error) {
         console.error("Error checking notifications:", error);
@@ -2944,6 +2919,300 @@ function renderVariantDisplay() {
     }
 }
 
+/* ---------- PROMOTIONS MANAGEMENT START ---------- */
+async function loadPromotions() {
+    const page = document.getElementById('promotions');
+    if (!state.supplier) return;
+    page.innerHTML = `<div class="page-header"><h1 class="main-header">Your Promotions</h1><button class="btn btn-primary" onclick="openPromotionRequestModal()">Request New Promotion</button></div><div class="card"><p>Loading promotion history...</p></div>`;
+    showLoader();
+    try {
+        const { data, error } = await db.from('promoted_products')
+            .select('*, product:products(id, title, image_url)')
+            .eq('supplier_id', state.supplier.id)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        state.promotions = data || [];
+        
+        let content = `<div class="card">`;
+        if (state.promotions.length === 0) {
+            content += `<div style="text-align: center; padding: 40px;"><h3>No Promotions Yet</h3><p>Click "Request New Promotion" to boost your product's visibility.</p></div>`;
+        } else {
+            content += `
+                <table class="content-table">
+                    <thead><tr><th>Product</th><th>End Date</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        ${state.promotions.map(p => `
+                            <tr>
+                                <td data-label="Product">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <img src="${p.product.image_url || 'https://via.placeholder.com/64'}" class="product-thumbnail">
+                                        <span>${p.product.title}</span>
+                                    </div>
+                                </td>
+                                <td data-label="End Date">${new Date(p.end_date).toLocaleDateString()}</td>
+                                <td data-label="Price">PKR ${p.price_paid}</td>
+                                <td data-label="Status">${renderPromotionStatusBadge(p.payment_status, p.end_date)}</td>
+                                <td data-label="Actions">
+                                    <button class="btn btn-view" onclick="viewPromotionDetails(${p.id})">View</button>
+                                    ${p.payment_status === 'approved_awaiting_payment' 
+                                        ? `<button class="btn btn-success" onclick="showPaymentInfoModal(${p.price_paid})">Pay Now</button>`
+                                        : ''
+                                    }
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+        content += `</div>`;
+        page.innerHTML = `<div class="page-header"><h1 class="main-header">Your Promotions</h1><button class="btn btn-primary" onclick="openPromotionRequestModal()">Request New Promotion</button></div>${content}`;
+    } catch (err) {
+        console.error('Error loading promotions:', err);
+        page.innerHTML = `<div class="error-message">Error loading promotions: ${err.message}.</div>`;
+    } finally {
+        hideLoader();
+    }
+}
+
+function renderPromotionStatusBadge(status, endDate) {
+    const now = new Date();
+    const end = new Date(endDate);
+
+    if (status === 'paid' && end > now) {
+        return `<span class="status-badge active">Active</span>`;
+    }
+    if (status === 'paid' && end <= now) {
+        return `<span class="status-badge expired">Expired</span>`;
+    }
+
+    let statusClass = '';
+    let statusText = status.replace(/_/g, ' ');
+
+    switch (status) {
+        case 'pending_approval': statusClass = 'pending'; break;
+        case 'approved_awaiting_payment': statusClass = 'awaiting-payment'; break;
+        case 'rejected': statusClass = 'rejected'; break;
+        default: statusClass = 'default';
+    }
+    return `<span class="status-badge ${statusClass}">${statusText}</span>`;
+}
+
+async function openPromotionRequestModal() {
+    showLoader();
+    try {
+        const { data: products, error: productsError } = await db.from('products').select('id, title, image_url').eq('supplier_id', state.supplier.id);
+        if (productsError) throw productsError;
+
+        const { data: pricingOptions, error: pricingError } = await db.from('promotion_pricing').select('*').order('duration_days');
+        if (pricingError) throw pricingError;
+        promotionPricingOptions = pricingOptions;
+
+        hideLoader();
+        if (products.length === 0) {
+            showConfirmation("You must have at least one product to create a promotion.", null, "No Products Found");
+            return;
+        }
+
+        promotionRequestState = { step: 1, productId: null, productName: null, productImg: null, duration: null, price: null };
+        const modal = document.getElementById('promotion-request-modal');
+        modal.innerHTML = `
+            <div class="modal" style="max-width: 700px;">
+                <div id="promotion-modal-content"></div>
+            </div>`;
+        renderPromotionStep(1, products);
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('visible'), 10);
+
+    } catch(err) {
+        hideLoader();
+        showConfirmation(`Error opening promotion request: ${err.message}`, null, 'Error');
+    }
+}
+
+function renderPromotionStep(step, products) {
+    const contentEl = document.getElementById('promotion-modal-content');
+    let html = '';
+    
+    switch (step) {
+        case 1:
+            html = `<h2>Step 1: Select a Product to Promote</h2>
+                    <div class="product-selection-list">
+                    ${products.map(p => `
+                        <div class="product-selection-item" onclick="selectPromotionProduct(this, ${p.id}, '${p.title.replace(/'/g, "\\'")}', '${p.image_url}')">
+                            <img src="${p.image_url || 'https://via.placeholder.com/64'}">
+                            <span>${p.title}</span>
+                        </div>
+                    `).join('')}
+                    </div>
+                    <div style="text-align:right; margin-top:20px;">
+                        <button class="btn btn-secondary" onclick="closeModal('promotion-request-modal')">Cancel</button>
+                        <button id="promo-step1-next" class="btn btn-primary" disabled onclick="renderPromotionStep(2)">Next</button>
+                    </div>`;
+            break;
+        case 2:
+            html = `<h2>Step 2: Choose Promotion Duration</h2>
+                    <div class="pricing-grid">
+                    ${promotionPricingOptions.map(opt => `
+                        <div class="pricing-card" onclick="selectPromotionPricing(this, ${opt.duration_days}, ${opt.price})">
+                            <h4>${opt.duration_days} Days</h4>
+                            <p>PKR ${opt.price}</p>
+                        </div>
+                    `).join('')}
+                    </div>
+                    <div style="text-align:right; margin-top:20px;">
+                         <button class="btn btn-secondary" onclick="openPromotionRequestModal()">Back</button>
+                         <button id="promo-step2-next" class="btn btn-primary" disabled onclick="renderPromotionStep(3)">Next</button>
+                    </div>`;
+            break;
+        case 3:
+            html = `<h2>Step 3: Confirm and Submit</h2>
+                    <div class="confirmation-summary">
+                        <h4>Review Your Promotion Request</h4>
+                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                            <img src="${promotionRequestState.productImg || 'https://via.placeholder.com/64'}" class="product-thumbnail">
+                            <p><strong>Product:</strong> ${promotionRequestState.productName}</p>
+                        </div>
+                        <p><strong>Duration:</strong> ${promotionRequestState.duration} Days</p>
+                        <p><strong>Total Price:</strong> PKR ${promotionRequestState.price}</p>
+                    </div>
+                    <p style="font-size: 0.9em; color: var(--text-light); margin-top: 15px;">By submitting, you agree to send this request to an administrator for approval. You will be notified when you can proceed with payment.</p>
+                     <div style="text-align:right; margin-top:20px;">
+                         <button class="btn btn-secondary" onclick="renderPromotionStep(2)">Back</button>
+                         <button class="btn btn-primary" onclick="submitPromotionRequest()">Submit for Approval</button>
+                    </div>`;
+            break;
+    }
+    contentEl.innerHTML = html;
+}
+
+function selectPromotionProduct(element, productId, productName, productImg) {
+    document.querySelectorAll('.product-selection-item').forEach(el => el.classList.remove('selected'));
+    element.classList.add('selected');
+    promotionRequestState.productId = productId;
+    promotionRequestState.productName = productName;
+    promotionRequestState.productImg = productImg;
+    document.getElementById('promo-step1-next').disabled = false;
+}
+
+function selectPromotionPricing(element, duration, price) {
+    document.querySelectorAll('.pricing-card').forEach(el => el.classList.remove('selected'));
+    element.classList.add('selected');
+    promotionRequestState.duration = duration;
+    promotionRequestState.price = price;
+    document.getElementById('promo-step2-next').disabled = false;
+}
+
+async function submitPromotionRequest() {
+    showLoader("Submitting request...");
+    try {
+        const startDate = new Date();
+        const endDate = new Date(startDate);
+        endDate.setDate(startDate.getDate() + promotionRequestState.duration);
+
+        const { error } = await db.from('promoted_products').insert({
+            product_id: promotionRequestState.productId,
+            supplier_id: state.supplier.id,
+            start_date: startDate.toISOString(),
+            end_date: endDate.toISOString(),
+            payment_status: 'pending_approval',
+            price_paid: promotionRequestState.price
+        });
+
+        if (error) throw error;
+        
+        closeModal('promotion-request-modal');
+        showConfirmation("Your promotion request has been submitted for admin approval.", null, "Request Sent");
+        await loadPromotions();
+
+    } catch (err) {
+        showConfirmation(`Error submitting request: ${err.message}`, null, 'Error');
+    } finally {
+        hideLoader();
+    }
+}
+
+function showPaymentInfoModal(price) {
+    const modal = document.getElementById('payment-info-modal');
+    modal.innerHTML = `
+        <div class="modal" style="max-width: 550px;">
+            <div class="modal-content">
+                <h2>Payment Instructions</h2>
+                <p>To activate your promotion for <strong>PKR ${price}</strong>, please transfer the amount to one of the accounts below.</p>
+
+                <div class="payment-account-card">
+                    <h3><i class="fas fa-mobile-alt"></i> Jazz Cash</h3>
+                    <p><strong>Account Name:</strong> Azher Mehmood</p>
+                    <p><strong>Account Number:</strong> 03495643002</p>
+                </div>
+
+                <div class="payment-account-card">
+                    <h3><i class="fas fa-sim-card"></i> Upaisa</h3>
+                    <p><strong>Account Name:</strong> Azher Mehmood</p>
+                    <p><strong>Account Number:</strong> 03348846378</p>
+                </div>
+
+                <div class="important-notice">
+                    <p><i class="fas fa-exclamation-triangle"></i> <strong>Important:</strong> After you have paid, please contact the admin. Your promotion will become active only after the admin has confirmed your payment.</p>
+                </div>
+
+                <button class="btn btn-secondary" style="margin-top: 25px;" onclick="closeModal('payment-info-modal')">Close</button>
+            </div>
+        </div>
+    `;
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('visible'), 10);
+}
+
+function viewPromotionDetails(promotionId) {
+    const promotion = state.promotions.find(p => p.id === promotionId);
+    if (!promotion) {
+        showConfirmation("Could not find promotion details.", null, 'Error');
+        return;
+    }
+    const modal = document.getElementById('promotion-detail-modal');
+    const duration = (new Date(promotion.end_date) - new Date(promotion.start_date)) / (1000 * 60 * 60 * 24);
+
+    modal.innerHTML = `
+        <div class="modal" style="max-width: 600px;">
+            <h2>Promotion Details</h2>
+            <div id="promotion-detail-modal-content">
+                 <div class="detail-row" style="padding-top: 15px; flex-direction: column; align-items: center; gap: 15px; border-bottom: none;">
+                    <img src="${promotion.product.image_url || 'https://via.placeholder.com/64'}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 12px; box-shadow: var(--shadow);">
+                    <h3 style="margin: 0;">${promotion.product.title}</h3>
+                 </div>
+                 <div class="detail-row">
+                    <span class="detail-label">Status</span>
+                    <span>${renderPromotionStatusBadge(promotion.payment_status, promotion.end_date)}</span>
+                 </div>
+                 <div class="detail-row">
+                    <span class="detail-label">Duration</span>
+                    <span>${duration} Days</span>
+                 </div>
+                 <div class="detail-row">
+                    <span class="detail-label">Promotion Price</span>
+                    <span>PKR ${promotion.price_paid}</span>
+                 </div>
+                 <div class="detail-row">
+                    <span class="detail-label">Start Date</span>
+                    <span>${new Date(promotion.start_date).toLocaleString()}</span>
+                 </div>
+                 <div class="detail-row">
+                    <span class="detail-label">End Date</span>
+                    <span>${new Date(promotion.end_date).toLocaleString()}</span>
+                 </div>
+            </div>
+             <div style="text-align:right; margin-top:20px;">
+                <button class="btn btn-secondary" onclick="closeModal('promotion-detail-modal')">Close</button>
+            </div>
+        </div>
+    `;
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('visible'), 10);
+}
+/* ---------- PROMOTIONS MANAGEMENT END ---------- */
+
 const handleImageUpload = (e) => { const files = e.target.files, previewsContainer = document.getElementById('image-previews'); for (let i=0; i<files.length; i++) { const file = files[i], total = newFiles.filter(f => f).length + previewsContainer.querySelectorAll('.preview-image-container[data-url]:not([data-removed="true"])').length; if (total >= 8) { showConfirmation('You can upload a maximum of 8 images.', null, 'Upload Limit'); break; } newFiles.push(file); const reader = new FileReader(); reader.onload = (event) => { const preview = document.createElement('div'); preview.className = 'preview-image-container'; const fileIndex = newFiles.length - 1; preview.innerHTML = `<img src="${event.target.result}" class="preview-image"><button type="button" class="delete-preview-btn" onclick="removeNewImage(this, ${fileIndex})">×</button>`; previewsContainer.appendChild(preview); }; reader.readAsDataURL(file); } e.target.value = ''; };
 const removeNewImage = (btn, index) => { newFiles[index] = null; btn.parentElement.remove(); };
 const removeExistingImage = (btn) => { const p = btn.parentElement; p.style.opacity = '0.5'; p.dataset.removed = 'true'; };
@@ -3097,7 +3366,8 @@ Object.assign(window, {
     showWithdrawalModal, closeModal, openAttributesManager, saveAttributesFromModal, showAddPaymentMethodModal,
     openChatDetail, closeChatDetail, handleVideoUpload, removeVideoPreview, deleteOrder,
     previewImage, previewProfileImage, viewReviewDetail, handleAttributeChange, addCustomAttributePair,
-    openVariantManager, filterColors, selectColor, renderSizeInputs, addVariantToList, removeVariant, saveVariantsAndClose
+    openVariantManager, filterColors, selectColor, renderSizeInputs, addVariantToList, removeVariant, saveVariantsAndClose,
+    openPromotionRequestModal, renderPromotionStep, selectPromotionProduct, selectPromotionPricing, submitPromotionRequest, showPaymentInfoModal, viewPromotionDetails
 });
 </script>
 </body>
