@@ -139,7 +139,7 @@
     .unread-badge { background: var(--success); color: white; border-radius: 50%; min-width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; }
 
     #chat-detail-container { display: none; flex-direction: column; height: 80vh; width: 100%; background: var(--white); border-radius: 12px; overflow: hidden; }
-    .chat-detail-header { display: flex; align-items: center; padding: 10px 15px; background-color: var(--secondary-color); border-bottom: 1px solid var(--border-color); }
+    .chat-detail-header { display: flex; align-items: center; padding: 10px 15px; background-color: var(--secondary-color); border-bottom: 1px solid var(--border-color); cursor: pointer; }
     .chat-back-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; margin-right: 15px; }
     .chat-detail-header h3 { margin: 0; font-size: 1.2rem; }
 
@@ -248,10 +248,10 @@
     .summary-card.paid { background: linear-gradient(45deg, var(--success), #22c55e); }
     .summary-card.balance { background: linear-gradient(45deg, var(--info), #60a5fa); }
     .status-badge { padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; color: white; text-transform: capitalize; }
-    .status-badge.processing, .status-badge.pending { background-color: var(--warning); }
+    .status-badge.processing, .status-badge.pending, .status-badge.pending-approval { background-color: var(--warning); }
     .status-badge.successful, .status-badge.active { background-color: var(--success); }
     .status-badge.canceled, .status-badge.rejected { background-color: var(--danger); }
-    .status-badge.awaiting-payment { background-color: var(--info); }
+    .status-badge.awaiting-payment, .status-badge.approved-awaiting-payment { background-color: var(--info); }
     .status-badge.expired { background-color: var(--text-light); }
     
     .whatsapp-fab {
@@ -340,6 +340,16 @@
     .important-notice { background-color: #fffbeb; border: 1px solid #fde68a; color: #b45309; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: left; opacity: 0; animation: card-fade-in 0.5s 0.3s ease-out forwards;}
     .important-notice p { margin: 0; }
     .important-notice strong { color: #92400e; }
+    .promotion-important-note {
+        padding: 15px 20px;
+        background: linear-gradient(45deg, #fffbeb, #fef3c7);
+        border-left: 5px solid #f59e0b;
+        border-radius: 8px;
+        margin-bottom: 24px;
+        color: #92400e;
+        animation: pulse-bg 3s infinite;
+    }
+    @keyframes pulse-bg { 0%, 100% { background-color: #fffbeb; } 50% { background-color: #fef9c3; } }
     #payment-info-modal .modal-content { text-align: center; }
     #payment-info-modal .payment-account-card:nth-of-type(2) { animation-delay: 0.15s; }
     #promotion-detail-modal-content { display: flex; flex-direction: column; gap: 15px; }
@@ -348,6 +358,26 @@
     #promotion-detail-modal-content .detail-label { font-weight: 600; color: var(--text-light); }
     .content-table .btn { margin: 2px; }
     /* --- PROMOTION STYLES END --- */
+
+    /* --- CHAT & PROFILE STYLES START --- */
+    .conversation-avatar, .chat-detail-header .conversation-avatar { cursor: pointer; }
+    .page-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--secondary-color); z-index: 2000; animation: page-fade-in 0.4s; }
+    .user-profile-page { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 20px; }
+    .profile-page-header { position: absolute; top: 20px; left: 20px; }
+    .profile-pic-large-container { position: relative; width: 200px; height: 200px; margin-bottom: 24px; cursor: pointer; }
+    .profile-pic-large-container::before { content: ''; position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: -1; margin: -5px; border-radius: 50%; background: linear-gradient(45deg, #00ffff, #ff00ff, #00ffff); background-size: 400% 400%; animation: animated-gradient 3s linear infinite, neon-glow 1.5s infinite alternate; }
+    @keyframes neon-glow { from { filter: blur(5px); } to { filter: blur(15px); } }
+    .profile-pic-large { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 5px solid var(--white); box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+    .user-profile-name { font-size: 2rem; font-weight: 700; color: var(--text-dark); }
+
+    .image-zoom-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 3000; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s; }
+    .image-zoom-overlay.visible { opacity: 1; visibility: visible; }
+    .image-zoom-content { position: relative; max-width: 90vw; max-height: 90vh; transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .image-zoom-overlay.visible .image-zoom-content { transform: scale(1); }
+    .image-zoom-content img { display: block; width: 100%; height: 100%; max-width: 90vw; max-height: 90vh; object-fit: contain; cursor: zoom-in; transition: transform 0.3s ease; }
+    .image-zoom-content img.zoomed { transform: scale(1.5); cursor: zoom-out; }
+    .image-zoom-close-btn { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.5rem; cursor: pointer; }
+    /* --- CHAT & PROFILE STYLES END --- */
 
     @media (max-width: 1024px) {
         .dashboard-charts-container { grid-template-columns: 1fr; }
@@ -474,7 +504,7 @@
         </div>
         <div class="sidebar-footer"><button id="logout-btn" class="btn btn-delete" style="width:100%;">Logout</button></div>
       </aside>
-      <main class="main-content">
+      <main class="main-content" id="main-content">
         <div class="mobile-header">
           <img src="logo.gif" alt="SJ10 Logo" class="brand-logo sidebar-logo">
           <button class="menu-toggle" id="menu-toggle">
@@ -518,6 +548,9 @@
         </div>
     </div>
   </div>
+
+  <div id="image-zoom-modal" class="image-zoom-overlay" onclick="closeImageModal()"></div>
+  <div id="user-profile-page" class="page-overlay"></div>
 
   <a href="https://chat.whatsapp.com/HU0KLNwx1BD1ItaKdpSA9y?mode=wwt" target="_blank" class="whatsapp-fab">
     <i class="fab fa-whatsapp"></i>
@@ -570,6 +603,7 @@ async function fetchConfig() {
 //                              -- END OF CONFIGURATION --
 //
 // =================================================================================== */
+
 // Data constants
 const signupCategories = ["Fashion Accessories", "Auto Accessories", "Electronics", "Home & Kitchen", "Beauty & Personal Care", "Sports & Outdoors", "Books", "Toys & Games", "Health & Household", "Industrial & Scientific"];
 const pakistanCities = ["Abbottabad","Bahawalpur","Faisalabad","Gujranwala","Gujrat","Hyderabad","Islamabad","Karachi","Lahore","Larkana","Mardan","Mirpur","Multan","Muzaffarabad","Peshawar","Quetta","Rahim Yar Khan","Rawalpindi","Sahiwal","Sargodha","Sheikhupura","Sialkot","Sukkur","Wah"].sort();
@@ -711,8 +745,7 @@ confirmationModal.addEventListener('click', (e) => {
 /* ---------- AUTHENTICATION & INITIALIZATION ---------- */
 document.addEventListener('DOMContentLoaded', initializeApp);
 
-async function initializeApp() {
- await fetchConfig(); // <<<--- ADD THIS LINE to run our new function and wait for the keys.
+async function initializeApp() {await fetchConfig(); // <<<--- ADD THIS LINE to run our new function and wait for the keys.
 
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return; // <<<--- ADD THIS LINE to stop if keys didn't load.
     
@@ -2126,7 +2159,7 @@ function renderChatList() {
             <ul class="conversation-list">
                 ${state.chatUsers.map(user => `
                     <li class="conversation-item" onclick="openChatDetail('${user.id}')">
-                        <div class="animated-gradient-border">
+                        <div class="animated-gradient-border" onclick="event.stopPropagation(); if ('${user.profile_pic}') showImageModal('${user.profile_pic}');">
                             <div class="conversation-avatar">${renderProfilePicture(user, 'chat')}</div>
                         </div>
                         <div class="conversation-details">
@@ -2152,9 +2185,11 @@ function openChatDetail(userId) {
     detailContainer.style.display = 'flex';
     
     detailContainer.innerHTML = `
-        <div class="chat-detail-header">
-            <button class="chat-back-btn" onclick="closeChatDetail()"><i class="fas fa-arrow-left"></i></button>
-            <div class="conversation-avatar" style="width: 40px; height: 40px; font-size: 1.2rem; margin-right: 10px;">${renderProfilePicture(user, 'chat')}</div>
+        <div class="chat-detail-header" onclick="showUserProfilePage('${user.id}')">
+            <button class="chat-back-btn" onclick="event.stopPropagation(); closeChatDetail();"><i class="fas fa-arrow-left"></i></button>
+            <div class="conversation-avatar" style="width: 40px; height: 40px; font-size: 1.2rem; margin-right: 10px;" onclick="event.stopPropagation(); if ('${user.profile_pic}') showImageModal('${user.profile_pic}');">
+                ${renderProfilePicture(user, 'chat')}
+            </div>
             <h3>${user.name}</h3>
         </div>
         <div class="chat-messages" id="chat-messages-area"></div>
@@ -2669,7 +2704,7 @@ function setupRealtimeSubscription() {
                 const updatedMessage = payload.new;
                 const messageIndex = state.messages.findIndex(m => m.id === updatedMessage.id);
                 if (messageIndex > -1) {
-                    state.messages[messageIndex].status = updatedMessage.status;
+                    state.messages[messageIndex] = { ...state.messages[messageIndex], ...updatedMessage };
                     if (state.activeChatUser && state.activeChatUser.chat_id === updatedMessage.chat_id) {
                         renderChatMessages(updatedMessage.chat_id);
                     }
@@ -2920,12 +2955,31 @@ function renderVariantDisplay() {
 }
 
 /* ---------- PROMOTIONS MANAGEMENT START ---------- */
+async function deleteOldPromotions() {
+    if (!state.supplier?.id) return;
+    try {
+        const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+        const { error } = await db.from('promoted_products')
+            .delete()
+            .lt('created_at', thirtyDaysAgo)
+            .eq('supplier_id', state.supplier.id);
+
+        if (error) {
+            console.error("Error deleting old promotions:", error.message);
+        }
+    } catch (err) {
+        console.error("Exception in deleteOldPromotions:", err);
+    }
+}
+
 async function loadPromotions() {
     const page = document.getElementById('promotions');
     if (!state.supplier) return;
     page.innerHTML = `<div class="page-header"><h1 class="main-header">Your Promotions</h1><button class="btn btn-primary" onclick="openPromotionRequestModal()">Request New Promotion</button></div><div class="card"><p>Loading promotion history...</p></div>`;
     showLoader();
     try {
+        await deleteOldPromotions();
+
         const { data, error } = await db.from('promoted_products')
             .select('*, product:products(id, title, image_url)')
             .eq('supplier_id', state.supplier.id)
@@ -2934,7 +2988,8 @@ async function loadPromotions() {
         if (error) throw error;
         state.promotions = data || [];
         
-        let content = `<div class="card">`;
+        const noteHtml = `<div class="promotion-important-note"><strong>Important Note:</strong> Your promotion history will be deleted after 30 days.</div>`;
+        let content = `<div class="card">${noteHtml}`;
         if (state.promotions.length === 0) {
             content += `<div style="text-align: center; padding: 40px;"><h3>No Promotions Yet</h3><p>Click "Request New Promotion" to boost your product's visibility.</p></div>`;
         } else {
@@ -2955,7 +3010,7 @@ async function loadPromotions() {
                                 <td data-label="Status">${renderPromotionStatusBadge(p.payment_status, p.end_date)}</td>
                                 <td data-label="Actions">
                                     <button class="btn btn-view" onclick="viewPromotionDetails(${p.id})">View</button>
-                                    ${p.payment_status === 'approved_awaiting_payment' 
+                                    ${p.payment_status === 'pending_approval'
                                         ? `<button class="btn btn-success" onclick="showPaymentInfoModal(${p.price_paid})">Pay Now</button>`
                                         : ''
                                     }
@@ -2987,15 +3042,9 @@ function renderPromotionStatusBadge(status, endDate) {
         return `<span class="status-badge expired">Expired</span>`;
     }
 
-    let statusClass = '';
-    let statusText = status.replace(/_/g, ' ');
+    let statusClass = (status || '').replace(/_/g, '-');
+    let statusText = (status || 'unknown').replace(/_/g, ' ');
 
-    switch (status) {
-        case 'pending_approval': statusClass = 'pending'; break;
-        case 'approved_awaiting_payment': statusClass = 'awaiting-payment'; break;
-        case 'rejected': statusClass = 'rejected'; break;
-        default: statusClass = 'default';
-    }
     return `<span class="status-badge ${statusClass}">${statusText}</span>`;
 }
 
@@ -3080,7 +3129,7 @@ function renderPromotionStep(step, products) {
                     <p style="font-size: 0.9em; color: var(--text-light); margin-top: 15px;">By submitting, you agree to send this request to an administrator for approval. You will be notified when you can proceed with payment.</p>
                      <div style="text-align:right; margin-top:20px;">
                          <button class="btn btn-secondary" onclick="renderPromotionStep(2)">Back</button>
-                         <button class="btn btn-primary" onclick="submitPromotionRequest()">Submit for Approval</button>
+                         <button class="btn btn-primary" onclick="submitPromotionForApproval()">Submit for Approval</button>
                     </div>`;
             break;
     }
@@ -3104,8 +3153,8 @@ function selectPromotionPricing(element, duration, price) {
     document.getElementById('promo-step2-next').disabled = false;
 }
 
-async function submitPromotionRequest() {
-    showLoader("Submitting request...");
+async function submitPromotionForApproval() {
+    showLoader("Submitting request for approval...");
     try {
         const startDate = new Date();
         const endDate = new Date(startDate);
@@ -3123,7 +3172,7 @@ async function submitPromotionRequest() {
         if (error) throw error;
         
         closeModal('promotion-request-modal');
-        showConfirmation("Your promotion request has been submitted for admin approval.", null, "Request Sent");
+        showConfirmation("Your promotion request has been submitted. You will be notified once it is approved by the admin.", null, "Request Sent");
         await loadPromotions();
 
     } catch (err) {
@@ -3188,7 +3237,7 @@ function viewPromotionDetails(promotionId) {
                  </div>
                  <div class="detail-row">
                     <span class="detail-label">Duration</span>
-                    <span>${duration} Days</span>
+                    <span>${duration.toFixed(0)} Days</span>
                  </div>
                  <div class="detail-row">
                     <span class="detail-label">Promotion Price</span>
@@ -3212,6 +3261,70 @@ function viewPromotionDetails(promotionId) {
     setTimeout(() => modal.classList.add('visible'), 10);
 }
 /* ---------- PROMOTIONS MANAGEMENT END ---------- */
+
+/* ---------- CHAT PROFILE & ZOOM START ---------- */
+function showImageModal(imageUrl) {
+    const modal = document.getElementById('image-zoom-modal');
+    modal.innerHTML = `
+        <div class="image-zoom-content" onclick="event.stopPropagation();">
+            <img src="${imageUrl}" alt="Profile Picture" onclick="this.classList.toggle('zoomed')">
+            <button class="image-zoom-close-btn" onclick="closeImageModal()">&times;</button>
+        </div>
+    `;
+    modal.classList.add('visible');
+}
+
+function closeImageModal() {
+    const modal = document.getElementById('image-zoom-modal');
+    modal.classList.remove('visible');
+    setTimeout(() => { modal.innerHTML = ''; }, 300);
+}
+
+async function showUserProfilePage(userId) {
+    showLoader();
+    const mainContent = document.getElementById('main-content');
+    const profilePage = document.getElementById('user-profile-page');
+    try {
+        const { data: user, error } = await db.from('users').select('first_name, last_name, brand_name, profile_pic').eq('id', userId).single();
+        if (error) throw error;
+
+        const displayName = (user.first_name && user.last_name && (user.first_name.trim() !== '' || user.last_name.trim() !== '')) 
+                            ? `${user.first_name} ${user.last_name}`.trim() 
+                            : user.brand_name;
+
+        profilePage.innerHTML = `
+            <div class="user-profile-page">
+                <div class="profile-page-header">
+                    <button class="btn btn-secondary" onclick="hideUserProfilePage()"><i class="fas fa-arrow-left"></i> Back to Chat</button>
+                </div>
+                <div class="profile-page-content">
+                    <div class="profile-pic-large-container" onclick="if ('${user.profile_pic}') showImageModal('${user.profile_pic}');">
+                        <img src="${user.profile_pic || 'https://via.placeholder.com/200'}" alt="User Profile" class="profile-pic-large">
+                    </div>
+                    <h2 class="user-profile-name">${displayName}</h2>
+                </div>
+            </div>
+        `;
+
+        mainContent.style.display = 'none';
+        profilePage.style.display = 'block';
+
+    } catch(err) {
+        console.error("Error loading user profile:", err);
+        showConfirmation(`Could not load user profile: ${err.message}`, null, 'Error');
+    } finally {
+        hideLoader();
+    }
+}
+
+function hideUserProfilePage() {
+    document.getElementById('main-content').style.display = 'block';
+    const profilePage = document.getElementById('user-profile-page');
+    profilePage.style.display = 'none';
+    profilePage.innerHTML = '';
+}
+/* ---------- CHAT PROFILE & ZOOM END ---------- */
+
 
 const handleImageUpload = (e) => { const files = e.target.files, previewsContainer = document.getElementById('image-previews'); for (let i=0; i<files.length; i++) { const file = files[i], total = newFiles.filter(f => f).length + previewsContainer.querySelectorAll('.preview-image-container[data-url]:not([data-removed="true"])').length; if (total >= 8) { showConfirmation('You can upload a maximum of 8 images.', null, 'Upload Limit'); break; } newFiles.push(file); const reader = new FileReader(); reader.onload = (event) => { const preview = document.createElement('div'); preview.className = 'preview-image-container'; const fileIndex = newFiles.length - 1; preview.innerHTML = `<img src="${event.target.result}" class="preview-image"><button type="button" class="delete-preview-btn" onclick="removeNewImage(this, ${fileIndex})">×</button>`; previewsContainer.appendChild(preview); }; reader.readAsDataURL(file); } e.target.value = ''; };
 const removeNewImage = (btn, index) => { newFiles[index] = null; btn.parentElement.remove(); };
@@ -3367,7 +3480,8 @@ Object.assign(window, {
     openChatDetail, closeChatDetail, handleVideoUpload, removeVideoPreview, deleteOrder,
     previewImage, previewProfileImage, viewReviewDetail, handleAttributeChange, addCustomAttributePair,
     openVariantManager, filterColors, selectColor, renderSizeInputs, addVariantToList, removeVariant, saveVariantsAndClose,
-    openPromotionRequestModal, renderPromotionStep, selectPromotionProduct, selectPromotionPricing, submitPromotionRequest, showPaymentInfoModal, viewPromotionDetails
+    openPromotionRequestModal, renderPromotionStep, selectPromotionProduct, selectPromotionPricing, submitPromotionForApproval, showPaymentInfoModal, viewPromotionDetails,
+    showImageModal, closeImageModal, showUserProfilePage, hideUserProfilePage
 });
 </script>
 </body>
