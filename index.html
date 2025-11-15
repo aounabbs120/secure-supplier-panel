@@ -873,12 +873,20 @@ async function handleSignup(e) {
     const errorDiv = document.getElementById('signup-error');
     errorDiv.style.display = 'none';
 
-    const businessGender = document.getElementById('business-gender').value;
-    if (!businessGender) {
-        errorDiv.textContent = 'Please select a business gender.';
-        errorDiv.style.display = 'block';
-        return;
-    }
+    // --- Get all form values ---
+    const email = document.getElementById('signup-email').value.toLowerCase();
+    const password = document.getElementById('signup-password').value;
+    const fullName = document.getElementById('signup-fullname').value;
+    const brandName = document.getElementById('signup-brand-name').value;
+    const contactNumber = document.getElementById('signup-contact').value;
+    const age = document.getElementById('signup-age').value;
+    const city = document.getElementById('signup-city').value;
+    const address = document.getElementById('signup-address').value;
+    const street_no = document.getElementById('signup-street-no').value;
+    const business_type = document.getElementById('business-type').value;
+    const stock_quantity_range = document.getElementById('stock-quantity').value;
+    const business_gender = document.getElementById('business-gender').value;
+    const selected_categories = Array.from(document.querySelectorAll('#signup-category-checkboxes input:checked')).map(cb => cb.value);
 
     const profilePicFile = document.getElementById('signup-profile-pic-file').files[0];
     if (!profilePicFile) {
@@ -889,52 +897,45 @@ async function handleSignup(e) {
 
     signupBtn.disabled = true;
     signupBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Processing...`;
+    showLoader('Creating your account...');
 
     try {
-        showLoader('Creating your account...');
-        const email = document.getElementById('signup-email').value.toLowerCase();
-        const contactNumber = document.getElementById('signup-contact').value;
-        
-        const { data: existingSupplier } = await db.from('suppliers').select('id').or(`email.eq.${email},contact_number.eq.${contactNumber}`).limit(1);
-        if (existingSupplier && existingSupplier.length > 0) throw new Error('An account with this email or phone number already exists.');
-        
-        const { data: signUpData, error: signUpError } = await db.auth.signUp({
-            email: email, password: document.getElementById('signup-password').value,
-            options: { data: { full_name: document.getElementById('signup-fullname').value, brand_name: document.getElementById('signup-brand-name').value } }
+        // --- Step 1: Upload the profile picture to Cloudinary FIRST ---
+        showLoader('Uploading profile picture...');
+        const profilePicUrl = await uploadToCloudinary(profilePicFile, 'profile_pictures');
+        if (!profilePicUrl) {
+            throw new Error("Failed to upload profile picture. Please try again.");
+        }
+
+        // --- Step 2: Sign up the user with email, password, and ALL other data in the `options.data` field ---
+        showLoader('Finalizing account...');
+        const { data, error: signUpError } = await db.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                data: {
+                    // This data will be automatically copied to your suppliers table by the trigger
+                    full_name: fullName,
+                    brand_name: brandName,
+                    contact_number: contactNumber,
+                    profile_pic: profilePicUrl,
+                    age: age,
+                    city: city,
+                    address: address,
+                    street_no: street_no,
+                    business_type: business_type,
+                    stock_quantity_range: stock_quantity_range,
+                    business_gender: business_gender,
+                    selected_categories: selected_categories
+                }
+            }
         });
 
         if (signUpError) throw signUpError;
-        if (!signUpData.user || (signUpData.user.identities && signUpData.user.identities.length === 0)) {
-            throw new Error("This email is already registered. Please use the login page.");
-        }
         
-        const newUserId = signUpData.user.id;
-        
-        showLoader('Uploading profile picture...');
-        const profilePicUrl = await uploadToCloudinary(profilePicFile, 'profile_pictures');
-
-        const supplierData = {
-            id: newUserId,
-            email: email,
-            profile_pic: profilePicUrl,
-            full_name: document.getElementById('signup-fullname').value,
-            brand_name: document.getElementById('signup-brand-name').value,
-            contact_number: contactNumber,
-            age: document.getElementById('signup-age').value,
-            city: document.getElementById('signup-city').value,
-            address: document.getElementById('signup-address').value,
-            street_no: document.getElementById('signup-street-no').value,
-            business_type: document.getElementById('business-type').value,
-            stock_quantity_range: document.getElementById('stock-quantity').value,
-            business_gender: document.getElementById('business-gender').value,
-            selected_categories: Array.from(document.querySelectorAll('#signup-category-checkboxes input:checked')).map(cb => cb.value)
-        };
-
-        const { error: insertError } = await db.from('suppliers').insert(supplierData);
-        if (insertError) throw insertError;
-        
+        // --- Success ---
         document.getElementById('signup-form').style.display = 'none';
-        const successMessageHTML = `<h3>Verification Email Sent!</h3><p>Please check your inbox to verify your email address. Once verified, an administrator will review and approve your account.</p>`;
+        const successMessageHTML = `<h3>Verification Email Sent!</h3><p>Please check your inbox at <strong>${email}</strong> to verify your email address. Once verified, an administrator will review and approve your account.</p>`;
         document.getElementById('success-message-content').innerHTML = successMessageHTML;
         document.getElementById('success-message-container').style.display = 'block';
 
