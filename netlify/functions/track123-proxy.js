@@ -7,19 +7,19 @@ exports.handler = async (event) => {
   }
 
   try {
-    // Get the tracking info sent from the browser
     const { tracking_number, courier_code } = JSON.parse(event.body);
     if (!tracking_number || !courier_code) {
       throw new Error("Tracking number and courier code are required.");
     }
 
-    // Securely get the API key from the Netlify environment variables
     const apiKey = process.env.TRACK123_API_KEY;
     if (!apiKey) {
-      throw new Error("API key is not configured on the server.");
+      // This is a server-side error, so we log it for ourselves.
+      console.error("FATAL: TRACK123_API_KEY is not set in Netlify environment variables.");
+      // We send a generic message to the user for security.
+      throw new Error("Shipping service is not configured correctly.");
     }
 
-    // Make the call to the actual Track123 API from Netlify's server
     const track123Response = await fetch('https://api.track123.com/v1/trackings/create', {
       method: 'POST',
       headers: {
@@ -34,12 +34,12 @@ exports.handler = async (event) => {
 
     const responseData = await track123Response.json();
 
-    // If Track123 returned an error, pass it back
     if (!track123Response.ok) {
-      throw new Error(responseData.meta.message || 'Track123 API error.');
+      // The error message from Track123 is safe to send to the user.
+      throw new Error(responseData.meta.message || 'An unknown error occurred with the tracking service.');
     }
 
-    // Send the successful response from Track123 back to the browser
+    // Success: Send the data from Track123 back to the browser.
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
@@ -47,9 +47,12 @@ exports.handler = async (event) => {
     };
 
   } catch (error) {
-    // Send any other errors back to the browser
+    // This 'catch' block now handles all errors gracefully.
+    console.error("Netlify Function Error:", error.message);
+    
+    // It ALWAYS returns a valid JSON object.
     return {
-      statusCode: 400,
+      statusCode: 400, // Bad Request
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ error: error.message }),
     };

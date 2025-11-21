@@ -2099,17 +2099,27 @@ async function handleDispatchSubmit(orderId) {
     }
     const courierName = selectedCourierEl.dataset.courier;
 
+    let isValid = false;
     let courierCode = '';
     if (courierName === 'Leopards') {
+        const leopardsRegex = /^[a-zA-Z0-9]{7,15}$/;
+        isValid = leopardsRegex.test(trackingNumber);
         courierCode = 'leopardscourier';
     } else if (courierName === 'PostEx') {
+        const postexRegex = /^\d{11,15}$/;
+        isValid = postexRegex.test(trackingNumber);
         courierCode = 'postex';
     }
 
-    showLoader("DEBUG: Initiating tracking...");
+    if (!isValid) {
+        showConfirmation(`The tracking number "${trackingNumber}" is not a valid format for ${courierName}. Please check and re-enter.`, null, "Invalid Tracking Number");
+        return;
+    }
+
+    showLoader("Initiating tracking...");
 
     try {
-        const response = await fetch(`/.netlify/functions/track123-proxy`, {
+        const proxyResponse = await fetch(`/.netlify/functions/track123-proxy`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -2118,25 +2128,39 @@ async function handleDispatchSubmit(orderId) {
             })
         });
 
-        // --- THE CRITICAL DEBUGGING PART ---
-        // Get the raw response text from the server, whatever it is
-        const responseText = await response.text();
+        const proxyData = await proxyResponse.json();
 
-        // Log the raw text to the browser's developer console
-        console.log('--- RAW NETLIFY RESPONSE ---');
-        console.log(responseText);
-        console.log('--------------------------');
+        if (!proxyResponse.ok) {
+            throw new Error(proxyData.error || 'Failed to register tracking via the server.');
+        }
         
-        // Now, we try to parse it, which will likely cause the error again
-        // But we have already logged the cause above!
-        const proxyData = JSON.parse(responseText);
+        if (proxyData.meta.code !== 200) {
+             throw new Error(proxyData.meta.message || 'An error occurred with Track123.');
+        }
 
-        // We will stop here. The rest of the function won't run.
-        showConfirmation(`DEBUG: Parsed response code: ${proxyData.meta.code}`, null, "Debug Info");
+        const initialStatus = proxyData.data?.status || 'Info Received';
+
+        const { error: shipmentError } = await db.from('shipments').insert({
+            order_id: orderId,
+            supplier_id: state.supplier.id,
+            courier_name: courierName,
+            tracking_number: trackingNumber,
+            current_status: initialStatus
+        });
+        if (shipmentError) throw shipmentError;
+
+        const { error: orderUpdateError } = await db.from('orders').update({
+            status: 'Shipped'
+        }).eq('id', orderId);
+        if (orderUpdateError) throw orderUpdateError;
+
+        closeModal('dispatch-order-modal');
+        await loadOrders();
+        await viewOrderDetail(orderId);
 
     } catch (err) {
-        console.error("DEBUG Dispatch Error:", err);
-        showConfirmation(`DEBUG: An error occurred. Check the developer console for the 'RAW NETLIFY RESPONSE'.`, null, "Error");
+        console.error("Dispatch Error:", err);
+        showConfirmation(`Failed to dispatch order: ${err.message}`, null, "Error");
     } finally {
         hideLoader();
     }
