@@ -17,35 +17,41 @@ exports.handler = async (event) => {
       throw new Error("Shipping service is not configured correctly on the server.");
     }
 
-    // --- THE ONLY CHANGE IS ON THIS LINE ---
-    // Using the standard REST endpoint for creating a resource.
+    // The API expects an ARRAY of tracking objects.
+    const payload = [{
+      tracking_number: tracking_number,
+      courier_code: courier_code,
+    }];
+
     const track123Response = await fetch('https://api.track123.com/v1/trackings', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Track123-Api-Key': apiKey,
       },
-      body: JSON.stringify({
-        tracking_number: tracking_number,
-        courier_code: courier_code,
-      }),
+      // --- THE ONLY CHANGE IS HERE: We now send the 'payload' array ---
+      body: JSON.stringify(payload), 
     });
     
-    const responseText = await track123Response.text();
+    const responseData = await track123Response.json();
 
     if (!track123Response.ok) {
-        try {
-            const errorJson = JSON.parse(responseText);
-            throw new Error(errorJson.meta.message || 'Unknown error from tracking service.');
-        } catch (e) {
-            throw new Error(`Tracking service returned a non-JSON error: ${responseText}`);
-        }
+        throw new Error(responseData.meta.message || 'Unknown error from tracking service.');
     }
     
+    // The response for a single creation is NOT an array, so we take the first element.
+    const singleTrackingResult = responseData.data[0];
+
+    // We modify the response to send back just the single object, not the array.
+    const finalResponse = {
+        meta: responseData.meta,
+        data: singleTrackingResult
+    }
+
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: responseText,
+      body: JSON.stringify(finalResponse),
     };
 
   } catch (error) {
