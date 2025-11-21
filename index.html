@@ -1,10 +1,3 @@
-Of course. Here is the complete and ready-to-use `index.html` file.
-
-This code has been updated to work perfectly with the `track123-proxy.js` Netlify function you just created. It securely calls your function without exposing any API keys in the code.
-
-Simply replace the entire content of your `index.html` file with the code below.
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -763,10 +756,11 @@ confirmationModal.addEventListener('click', (e) => {
 
 /* ---------- AUTHENTICATION & INITIALIZATION ---------- */
 document.addEventListener('DOMContentLoaded', initializeApp);
-
 async function initializeApp() {await fetchConfig(); // <<<--- ADD THIS LINE to run our new function and wait for the keys.
 
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return; // <<<--- ADD THIS LINE to stop if keys didn't load.
+
+async function initializeApp() {
     
   db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   
@@ -2148,33 +2142,30 @@ async function handleDispatchSubmit(orderId) {
     showLoader("Initiating tracking...");
 
     try {
-        // --- Call YOUR Netlify Function ---
-        const proxyResponse = await fetch(`/.netlify/functions/track123-proxy`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
+        // --- THIS IS THE KEY CHANGE: We now call the Supabase Function URL ---
+        const { data: proxyData, error: functionError } = await db.functions.invoke('track123-proxy', {
+            body: {
                 tracking_number: trackingNumber,
                 courier_code: courierCode
-            })
+            }
         });
 
-        const proxyData = await proxyResponse.json();
-
-        // Handle errors returned from our Netlify Function
-        if (!proxyResponse.ok) {
-            throw new Error(proxyData.error || 'Failed to register tracking via the server.');
+        // Handle errors from the function call itself or from inside the function
+        if (functionError) {
+            throw new Error(functionError.message);
+        }
+        if (proxyData.error) {
+            throw new Error(proxyData.error);
         }
         
-        // Handle errors returned from the Track123 API itself
+        // Handle errors from the Track123 API
         if (proxyData.meta.code !== 200) {
              throw new Error(proxyData.meta.message || 'An error occurred with Track123.');
         }
 
         const initialStatus = proxyData.data?.status || 'Info Received';
 
-        // --- 3. Save to Supabase 'shipments' table ---
+        // --- The rest of the logic is the same ---
         const { error: shipmentError } = await db.from('shipments').insert({
             order_id: orderId,
             supplier_id: state.supplier.id,
@@ -2184,13 +2175,11 @@ async function handleDispatchSubmit(orderId) {
         });
         if (shipmentError) throw shipmentError;
 
-        // --- 4. Update order status to 'Shipped' ---
         const { error: orderUpdateError } = await db.from('orders').update({
             status: 'Shipped'
         }).eq('id', orderId);
         if (orderUpdateError) throw orderUpdateError;
 
-        // --- 5. Success ---
         closeModal('dispatch-order-modal');
         await loadOrders();
         await viewOrderDetail(orderId);
@@ -2202,7 +2191,6 @@ async function handleDispatchSubmit(orderId) {
         hideLoader();
     }
 }
-
 
 /* ---------- REVIEWS MANAGEMENT ---------- */
 function generateStars(rating) {
