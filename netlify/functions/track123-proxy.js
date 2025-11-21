@@ -1,23 +1,23 @@
 // File: netlify/functions/track123-proxy.js
 
 exports.handler = async (event) => {
-  // Only allow POST requests
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
   try {
     const { tracking_number, courier_code } = JSON.parse(event.body);
+    const apiKey = process.env.TRACK123_API_KEY;
+
+    // --- Added input validation logging ---
+    console.log(`Received request: TN=${tracking_number}, CC=${courier_code}`);
+
     if (!tracking_number || !courier_code) {
       throw new Error("Tracking number and courier code are required.");
     }
-
-    const apiKey = process.env.TRACK123_API_KEY;
     if (!apiKey) {
-      // This is a server-side error, so we log it for ourselves.
-      console.error("FATAL: TRACK123_API_KEY is not set in Netlify environment variables.");
-      // We send a generic message to the user for security.
-      throw new Error("Shipping service is not configured correctly.");
+      console.error("FATAL: TRACK123_API_KEY environment variable not found.");
+      throw new Error("Shipping service is not configured correctly on the server.");
     }
 
     const track123Response = await fetch('https://api.track123.com/v1/trackings/create', {
@@ -31,28 +31,35 @@ exports.handler = async (event) => {
         courier_code: courier_code,
       }),
     });
-
-    const responseData = await track123Response.json();
+    
+    // --- New Robust Error Handling ---
+    // We get the raw text first to avoid JSON parsing errors
+    const responseText = await track123Response.text();
+    console.log(`Track123 Response Status: ${track123Response.status}`);
+    console.log(`Track123 Raw Response Body: ${responseText}`);
 
     if (!track123Response.ok) {
-      // The error message from Track123 is safe to send to the user.
-      throw new Error(responseData.meta.message || 'An unknown error occurred with the tracking service.');
+        // Try to parse as JSON, but have a fallback
+        try {
+            const errorJson = JSON.parse(responseText);
+            throw new Error(errorJson.meta.message || 'Unknown error from tracking service.');
+        } catch (e) {
+            // If the response wasn't JSON, throw the raw text
+            throw new Error(`Tracking service returned a non-JSON error: ${responseText}`);
+        }
     }
-
-    // Success: Send the data from Track123 back to the browser.
+    
+    // Success: Return the valid JSON we received
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(responseData),
+      body: responseText, // responseText is already a valid JSON string
     };
 
   } catch (error) {
-    // This 'catch' block now handles all errors gracefully.
-    console.error("Netlify Function Error:", error.message);
-    
-    // It ALWAYS returns a valid JSON object.
+    console.error("Netlify Function CRASH:", error.message);
     return {
-      statusCode: 400, // Bad Request
+      statusCode: 400,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ error: error.message }),
     };

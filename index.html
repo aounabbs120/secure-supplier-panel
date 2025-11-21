@@ -2131,7 +2131,8 @@ async function handleDispatchSubmit(orderId) {
         const proxyData = await proxyResponse.json();
 
         if (!proxyResponse.ok) {
-            throw new Error(proxyData.error || 'Failed to register tracking via the server.');
+            // This will now correctly show the error message from the function's catch block
+            throw new Error(proxyData.error || 'The server function returned an error.');
         }
         
         if (proxyData.meta.code !== 200) {
