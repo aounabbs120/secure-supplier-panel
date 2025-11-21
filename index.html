@@ -2088,6 +2088,7 @@ function selectCourier(element) {
  * This function calls the Netlify Function 'track123-proxy' which securely handles the API key
  * and communication with the Track123 API.
  */
+// --- TEMPORARY DEBUGGING VERSION ---
 async function handleDispatchSubmit(orderId) {
     const selectedCourierEl = document.querySelector('.courier-option.selected');
     const trackingNumber = document.getElementById('tracking-number').value.trim();
@@ -2098,84 +2099,44 @@ async function handleDispatchSubmit(orderId) {
     }
     const courierName = selectedCourierEl.dataset.courier;
 
-    let isValid = false;
     let courierCode = '';
     if (courierName === 'Leopards') {
-        const leopardsRegex = /^[a-zA-Z0-9]{7,15}$/;
-        isValid = leopardsRegex.test(trackingNumber);
         courierCode = 'leopardscourier';
     } else if (courierName === 'PostEx') {
-        const postexRegex = /^\d{11,15}$/;
-        isValid = postexRegex.test(trackingNumber);
         courierCode = 'postex';
     }
 
-    if (!isValid) {
-        showConfirmation(`The tracking number "${trackingNumber}" is not a valid format for ${courierName}. Please check and re-enter.`, null, "Invalid Tracking Number");
-        return;
-    }
-
-    showLoader("Initiating tracking...");
+    showLoader("DEBUG: Initiating tracking...");
 
     try {
-        // --- Call YOUR Netlify Function ---
-        const proxyResponse = await fetch(`/.netlify/functions/track123-proxy`, {
+        const response = await fetch(`/.netlify/functions/track123-proxy`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 tracking_number: trackingNumber,
                 courier_code: courierCode
             })
         });
 
-        // --- NEW, ROBUST ERROR HANDLING ---
-        // Check if the server responded with an error status (like 400, 404, 500)
-        if (!proxyResponse.ok) {
-            // Get the raw text of the error response
-            const errorText = await proxyResponse.text(); 
-            // Check if it's the HTML error page or a JSON error from our function
-            if (errorText.startsWith('{')) {
-                const errorJson = JSON.parse(errorText);
-                throw new Error(errorJson.error || `Server error: ${proxyResponse.status}`);
-            } else {
-                // This will now give a clear error if Netlify returned a generic page
-                throw new Error(`Function call failed with status ${proxyResponse.status}. The function may not have deployed correctly.`);
-            }
-        }
+        // --- THE CRITICAL DEBUGGING PART ---
+        // Get the raw response text from the server, whatever it is
+        const responseText = await response.text();
+
+        // Log the raw text to the browser's developer console
+        console.log('--- RAW NETLIFY RESPONSE ---');
+        console.log(responseText);
+        console.log('--------------------------');
         
-        const proxyData = await proxyResponse.json();
-        
-        if (proxyData.meta.code !== 200) {
-             throw new Error(proxyData.meta.message || 'An error occurred with Track123.');
-        }
+        // Now, we try to parse it, which will likely cause the error again
+        // But we have already logged the cause above!
+        const proxyData = JSON.parse(responseText);
 
-        const initialStatus = proxyData.data?.status || 'Info Received';
-
-        // The rest of the logic remains the same
-        const { error: shipmentError } = await db.from('shipments').insert({
-            order_id: orderId,
-            supplier_id: state.supplier.id,
-            courier_name: courierName,
-            tracking_number: trackingNumber,
-            current_status: initialStatus
-        });
-        if (shipmentError) throw shipmentError;
-
-        const { error: orderUpdateError } = await db.from('orders').update({
-            status: 'Shipped'
-        }).eq('id', orderId);
-        if (orderUpdateError) throw orderUpdateError;
-
-        closeModal('dispatch-order-modal');
-        await loadOrders();
-        await viewOrderDetail(orderId);
+        // We will stop here. The rest of the function won't run.
+        showConfirmation(`DEBUG: Parsed response code: ${proxyData.meta.code}`, null, "Debug Info");
 
     } catch (err) {
-        console.error("Dispatch Error:", err);
-        // This will now show the more helpful error message
-        showConfirmation(`Failed to dispatch order: ${err.message}`, null, "Error");
+        console.error("DEBUG Dispatch Error:", err);
+        showConfirmation(`DEBUG: An error occurred. Check the developer console for the 'RAW NETLIFY RESPONSE'.`, null, "Error");
     } finally {
         hideLoader();
     }
