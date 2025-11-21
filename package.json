@@ -1,4 +1,23 @@
 {
+  "name": "secure-supplier-panel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "attributes.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aounabbs120/secure-supplier-panel.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/aounabbs120/secure-supplier-panel/issues"
+  },
+  "homepage": "https://github.com/aounabbs120/secure-supplier-panel#readme",
   "devDependencies": {
     "supabase": "^2.58.5"
   }

@@ -1,0 +1,8 @@
+# Dependencies
+/node_modules
+
+# Netlify build folder (good practice)
+.netlify
+
+# VS Code editor settings
+.vscode
